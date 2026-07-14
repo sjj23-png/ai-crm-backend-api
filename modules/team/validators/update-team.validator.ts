@@ -1,0 +1,1 @@
+export {updateTeamSchema,} from "./team.validator";

@@ -1,0 +1,75 @@
+import { Request, Response } from "express";
+import { AuthService } from "../services/auth.service";
+
+export class AuthController {
+  private readonly authService = new AuthService();
+
+  register = async (req: Request, res: Response) => {
+    try {
+      const result = await this.authService.register(req.body);
+
+      return res.status(201).json(result);
+    } catch (error: any) {
+      return res.status(400).json({
+        message: error.message,
+      });
+    }
+  };
+
+  login = async (req: Request, res: Response) => {
+    try {
+      const result = await this.authService.login(req.body);
+
+      return res.status(200).json(result);
+    } catch (error: any) {
+      return res.status(401).json({
+        message: error.message,
+      });
+    }
+  };
+
+  logout = async (req: Request, res: Response) => {
+  try {
+    const token = req.headers.authorization?.split(" ")[1];
+
+    if (!token) {
+      return res.status(401).json({
+        message: "Unauthorized",
+      });
+    }
+
+    const result = await this.authService.logout(token);
+
+    return res.json(result);
+  } catch (error: any) {
+    return res.status(400).json({
+      message: error.message,
+    });
+  }
+};
+
+me = async (req: Request, res: Response) => {
+  try {
+    const user = await this.authService.me(req.user!.id);
+
+    return res.json(user);
+  } catch (error: any) {
+    return res.status(404).json({
+      message: error.message,
+    });
+  }
+};
+refreshToken = async (req: Request, res: Response) => {
+  try {
+    const result = await this.authService.refreshToken(
+      req.body.refreshToken
+    );
+
+    return res.json(result);
+  } catch (error: any) {
+    return res.status(401).json({
+      message: error.message,
+    });
+  }
+};
+}

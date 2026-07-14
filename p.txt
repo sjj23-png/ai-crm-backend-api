@@ -1,0 +1,317 @@
+dto : create-user.dto.ts import { z } from "zod";
+
+
+export const CreateUserSchema = z.object({
+  name: z.string().min(2).max(100),
+  email: z.string().email(),
+  password: z.string().min(6),
+  tenantId: z.string().cuid(),
+  roleId: z.string().cuid()
+});
+
+export type CreateUserDto = z.infer<typeof CreateUserSchema>;
+
+
+
+
+
+
+
+
+update-user.dto.ts 
+export class UpdateUserDto {
+  name?: string;
+  phone?: string;
+  roleId?: string;
+  status?: "ACTIVE" | "INACTIVE" | "SUSPENDED";
+}
+
+user.repository.ts 
+import prisma from "../../../database/prisma.service";
+
+export class UserRepository {
+
+  create(data: {
+    name: string;
+    email: string;
+    passwordHash: string;
+    tenantId: string;
+    roleId: string;
+  }) {
+
+    return prisma.user.create({
+      data
+    });
+
+  }
+
+  findById(id: string) {
+
+    return prisma.user.findUnique({
+
+      where: { id },
+
+      include: {
+        tenant: true,
+        role: true,
+        profile: true
+      }
+
+    });
+
+  }
+
+  findByEmail(email: string) {
+
+    return prisma.user.findUnique({
+
+      where: { email }
+
+    });
+
+  }
+
+  findAll(tenantId: string) {
+
+    return prisma.user.findMany({
+
+      where: {
+        tenantId
+      },
+
+      include: {
+        role: true,
+        profile: true
+      },
+
+      orderBy: {
+        createdAt: "desc"
+      }
+
+    });
+
+  }
+
+  update(id: string, data: any) {
+
+    return prisma.user.update({
+
+      where: { id },
+
+      data
+
+    });
+
+  }
+
+  delete(id: string) {
+
+    return prisma.user.delete({
+
+      where: { id }
+
+    });
+
+  }
+
+}
+user.service.tsimport bcrypt from "bcrypt";
+import { CreateUserDto } from "../dto/create-user.dto";
+import { UserRepository } from "../repositories/user.repository";
+
+export class UserService {
+
+  private repository =
+    new UserRepository();
+
+  async create(data: CreateUserDto) {
+
+    const exists =
+      await this.repository.findByEmail(data.email);
+
+    if (exists) {
+      throw new Error("Email already exists.");
+    }
+
+    const passwordHash =
+      await bcrypt.hash(
+        data.password,
+        Number(process.env.BCRYPT_SALT)
+      );
+
+    const user =
+      await this.repository.create({
+
+        name: data.name,
+
+        email: data.email,
+
+        passwordHash,
+
+        tenantId: data.tenantId,
+
+        roleId: data.roleId
+
+      });
+
+    return user;
+
+  }
+
+  async getAll(tenantId: string) {
+
+    return this.repository.findAll(tenantId);
+
+  }
+
+  async getById(id: string) {
+
+    const user =
+      await this.repository.findById(id);
+
+    if (!user) {
+      throw new Error("User not found.");
+    }
+
+    return user;
+
+  }
+
+  async delete(id: string) {
+
+    await this.repository.delete(id);
+
+    return {
+
+      message: "User deleted successfully."
+
+    };
+
+  }
+
+}
+
+
+user.controller.ts
+import { Request, Response } from "express";
+import { UserService } from "../services/user.service";
+
+export class UserController {
+
+  private service =
+    new UserService();
+
+  create = async (
+    req: Request,
+    res: Response
+  ) => {
+
+    try {
+
+      const result =
+        await this.service.create(req.body);
+
+      return res.status(201).json(result);
+
+    } catch (error: any) {
+
+      return res.status(400).json({
+
+        message: error.message
+
+      });
+
+    }
+
+  };
+
+  getAll = async (
+    req: Request,
+    res: Response
+  ) => {
+
+    const users =
+      await this.service.getAll(
+        req.user!.tenantId
+      );
+
+    return res.json(users);
+
+  };
+
+  getById = async (
+    req: Request,
+    res: Response
+  ) => {
+
+    try {
+
+      const user =
+        await this.service.getById(
+          req.params.id as string
+        );
+
+      return res.json(user);
+
+    } catch (error: any) {
+
+      return res.status(404).json({
+
+        message: error.message
+
+      });
+
+    }
+
+  };
+
+  delete = async (
+    req: Request,
+    res: Response
+  ) => {
+
+    const result =
+      await this.service.delete(
+        req.params.id as string
+      );
+
+    return res.json(result);
+
+  };
+
+}user.module.ts
+import { Router } from "express";
+import { authGuard } from "../auth/guards/auth.guard";
+
+import { UserController } from "./controllers/user.controller";
+
+const router = Router();
+
+const controller =
+  new UserController();
+
+router.post(
+  "/",
+  authGuard,
+  controller.create
+);
+
+router.get(
+  "/",
+  authGuard,
+  controller.getAll
+);
+
+router.get(
+  "/:id",
+  authGuard,
+  controller.getById
+);
+
+router.delete(
+  "/:id",
+  authGuard,
+  controller.delete
+);
+
+export default router;
