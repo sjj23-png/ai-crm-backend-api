@@ -6,7 +6,7 @@ import { BrowserRouter } from "react-router-dom";
 import { AuthProvider } from "../features/auth/context";
 import { PageLoader } from "../components/feedback";
 
-import { ThemeProvider } from "@/design-system/theme";
+import { ThemeProvider } from "../design-system/theme/theme.provider";
 
 
 import { Suspense } from "react";
