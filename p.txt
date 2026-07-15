@@ -13,7 +13,7 @@ export type CreateUserDto = z.infer<typeof CreateUserSchema>;
 
 
 
-
+convert animator k to lazy loader okay
 
 
 

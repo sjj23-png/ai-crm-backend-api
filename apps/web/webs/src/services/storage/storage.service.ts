@@ -1,0 +1,37 @@
+import type { StorageProvider } from "./storage.types";
+
+
+class BrowserStorageService implements StorageProvider {
+  get<T>(key: string): T | null {
+    const value = localStorage.getItem(key);
+
+    if (!value) {
+      return null;
+    }
+
+    return JSON.parse(value) as T;
+  }
+
+  set<T>(key: string, value: T): void {
+    localStorage.setItem(
+      key,
+      JSON.stringify(value)
+    );
+  }
+
+  remove(key: string): void {
+    localStorage.removeItem(key);
+  }
+
+  clear(): void {
+    localStorage.clear();
+  }
+
+  has(key: string): boolean {
+    return localStorage.getItem(key) !== null;
+  }
+}
+
+const storageService = new BrowserStorageService();
+
+export default storageService;

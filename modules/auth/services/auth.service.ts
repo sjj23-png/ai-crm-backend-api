@@ -36,7 +36,9 @@ export class AuthService {
   }
 
   async login(data: LoginDto) {
-    const user = await this.authRepository.findUserByEmail(data.email);
+    const user = await this.authRepository.findUserByEmail(
+      data.email
+    );
 
     if (!user) {
       throw new Error("Invalid email or password.");
@@ -55,16 +57,24 @@ export class AuthService {
       throw new Error("User account is inactive.");
     }
 
-    const accessToken = JwtUtil.generateAccessToken({
+    const payload = {
       id: user.id,
       tenantId: user.tenantId,
       roleId: user.roleId,
-      email:user.email
-    });
+      email: user.email,
+    };
+
+    const accessToken =
+      JwtUtil.generateAccessToken(payload);
+
+    const refreshToken =
+      JwtUtil.generateRefreshToken(payload);
 
     await this.authRepository.createSession({
       userId: user.id,
-      token: accessToken,
+
+      token: refreshToken,
+
       expiresAt: new Date(
         Date.now() + 7 * 24 * 60 * 60 * 1000
       ),
@@ -72,69 +82,76 @@ export class AuthService {
 
     return {
       accessToken,
+      refreshToken,
       user,
     };
   }
   async logout(token: string) {
-  const session = await this.authRepository.findSession(token);
+    JwtUtil.verifyRefreshToken(token)
+    const session = await this.authRepository.findSession(token);
 
-  if (!session) {
-    throw new Error("Session not found.");
+    if (!session) {
+      throw new Error("Session not found.");
+    }
+
+    await this.authRepository.deleteSession(token);
+
+    return {
+      message: "Logged out successfully.",
+    };
   }
 
-  await this.authRepository.deleteSession(token);
-
-  return {
-    message: "Logged out successfully.",
-  };
-}
 
 
 
 
+  async me(userId: string) {
+    const user = await this.authRepository.findUserById(userId);
 
-async me(userId: string) {
-  const user = await this.authRepository.findUserById(userId);
+    if (!user) {
+      throw new Error("User not found.");
+    }
 
-  if (!user) {
-    throw new Error("User not found.");
+    return user;
   }
+  async refreshToken(token: string) {
 
-  return user;
-}
-async refreshToken(token: string) {
-  const refreshToken =
-    await this.authRepository.findRefreshToken(token);
 
-  if (!refreshToken) {
-    throw new Error("Invalid refresh token.");
+
+
+    JwtUtil.verifyRefreshToken(token);
+    const refreshToken =
+      await this.authRepository.findRefreshToken(token);
+
+    if (!refreshToken) {
+      throw new Error("Invalid refresh token.");
+    }
+
+    if (refreshToken.revoked) {
+      throw new Error("Refresh token revoked.");
+    }
+
+    if (refreshToken.expiresAt < new Date()) {
+      throw new Error("Refresh token expired.");
+    }
+
+    const user = await this.authRepository.findUserById(
+      refreshToken.userId
+    );
+
+    if (!user) {
+      throw new Error("User not found.");
+    }
+
+    const accessToken = JwtUtil.generateAccessToken({
+      id: user.id,
+      tenantId: user.tenantId,
+      roleId: user.roleId,
+      email: user.email
+    });
+
+    return {
+      accessToken,
+    };
   }
-
-  if (refreshToken.revoked) {
-    throw new Error("Refresh token revoked.");
-  }
-
-  if (refreshToken.expiresAt < new Date()) {
-    throw new Error("Refresh token expired.");
-  }
-
-  const user = await this.authRepository.findUserById(
-    refreshToken.userId
-  );
-
-  if (!user) {
-    throw new Error("User not found.");
-  }
-
-  const accessToken = JwtUtil.generateAccessToken({
-    id: user.id,
-    tenantId: user.tenantId,
-    roleId: user.roleId,
-    email:user.email
-  });
-
-  return {
-    accessToken,
-  };
-}
 }

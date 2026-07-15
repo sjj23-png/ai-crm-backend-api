@@ -4,12 +4,6 @@ export interface LoginRequest {
   password: string;
 }
 
-export interface LoginResponse {
-  accessToken: string;
-
-  refreshToken: string;
-}
-
 export interface AuthUser {
   id: string;
 
@@ -17,5 +11,17 @@ export interface AuthUser {
 
   email: string;
 
-  role: string;
+  tenantId: string;
+
+  roleId: string;
+
+  status?: string;
+}
+
+export interface LoginResponse {
+  accessToken: string;
+
+  refreshToken: string;
+
+  user: AuthUser;
 }

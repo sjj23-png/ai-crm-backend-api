@@ -1,15 +1,23 @@
 import { StrictMode } from "react";
-import { createRoot } from "react-dom/client";
 
+
+import { createRoot } from "react-dom/client";
+import { ErrorBoundary } from "./components/feedback";
 import "./index.css";
 
-import App from "./App";
 import AppProvider from "./providers/AppProvider";
 
-createRoot(document.getElementById("root")!).render(
+import AppRoutes from "./routes";
+
+createRoot(
+  document.getElementById("root")!
+).render(
   <StrictMode>
-    <AppProvider>
-      <App />
-    </AppProvider>
-  </StrictMode>,
+    <ErrorBoundary>
+      <AppProvider>
+        <AppRoutes />
+      </AppProvider>
+
+    </ErrorBoundary>
+  </StrictMode>
 );
