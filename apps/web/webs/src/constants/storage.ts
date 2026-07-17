@@ -1,13 +1,13 @@
 const storage = {
-  accessToken: "crm_access_token",
+  accessToken: "access_token",
 
-  refreshToken: "crm_refresh_token",
+  refreshToken: "refresh_token",
 
   user: "crm_user",
 
-  language: "crm_language",
+  language: "language",
 
-  theme: "crm_theme",
+  theme: "theme",
 
   permissions: "crm_permissions",
 } as const;

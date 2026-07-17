@@ -1,2 +1,5 @@
-import apiClient from "./interceptor";
-export default apiClient;
+import "./interceptor";
+
+export { apiClient } from "./client";
+
+export * from "./endpoints";

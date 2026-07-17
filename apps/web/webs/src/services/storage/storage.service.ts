@@ -1,5 +1,5 @@
 import type { StorageProvider } from "./storage.types";
-
+import storage from "@/constants/storage";
 
 class BrowserStorageService implements StorageProvider {
   get<T>(key: string): T | null {
@@ -24,12 +24,46 @@ class BrowserStorageService implements StorageProvider {
   }
 
   clear(): void {
-    localStorage.clear();
-  }
+  this.remove(storage.accessToken);
+  this.remove(storage.refreshToken);
+  this.remove(storage.user);
+  this.remove(storage.permissions);
+}
 
   has(key: string): boolean {
     return localStorage.getItem(key) !== null;
   }
+
+
+
+
+
+
+
+
+  getAccessToken(): string | null {
+  return this.get<string>(storage.accessToken);
+}
+
+setAccessToken(token: string): void {
+  this.set(storage.accessToken, token);
+}
+
+removeAccessToken(): void {
+  this.remove(storage.accessToken);
+}
+
+getRefreshToken(): string | null {
+  return this.get<string>(storage.refreshToken);
+}
+
+setRefreshToken(token: string): void {
+  this.set(storage.refreshToken, token);
+}
+
+removeRefreshToken(): void {
+  this.remove(storage.refreshToken);
+}
 }
 
 const storageService = new BrowserStorageService();

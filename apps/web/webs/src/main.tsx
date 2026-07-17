@@ -4,9 +4,7 @@ import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 import { ErrorBoundary } from "./components/feedback";
 import "./index.css";
-
-import AppProvider from "./providers/AppProvider";
-
+import { AppProviders } from "@/app/providers/AppProviders";
 import AppRoutes from "./routes";
 
 createRoot(
@@ -14,9 +12,9 @@ createRoot(
 ).render(
   <StrictMode>
     <ErrorBoundary>
-      <AppProvider>
+      <AppProviders>
         <AppRoutes />
-      </AppProvider>
+      </AppProviders>
 
     </ErrorBoundary>
   </StrictMode>

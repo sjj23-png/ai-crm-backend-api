@@ -52,11 +52,11 @@ export function Input({
       )}
 
       <div className="relative flex items-center">
-        {leftIcon && (
+        {/* {leftIcon && (
           <div className="absolute left-3">
             {leftIcon}
           </div>
-        )}
+        )} */}
 
         <input
           ref={ref}

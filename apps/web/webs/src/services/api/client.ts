@@ -1,13 +1,11 @@
 import axios from "axios";
 
 
-import apiConfig from "../../config/api.config";
+import apiConfig from "@/config/api.config";
 
-const apiClient = axios.create({
+export const apiClient = axios.create({
   baseURL: apiConfig.baseURL,
-
   timeout: apiConfig.timeout,
-
   withCredentials: apiConfig.withCredentials,
 
   headers: {
@@ -15,5 +13,3 @@ const apiClient = axios.create({
     Accept: "application/json",
   },
 });
-
-export default apiClient;

@@ -1,18 +1,38 @@
-import apiClient from "./client";
+import axios from "axios";
+import type { AxiosError, InternalAxiosRequestConfig } from "axios";
 
+
+import { apiClient } from "./client";
 
 apiClient.interceptors.request.use(
-  (config) => {
+  (config: InternalAxiosRequestConfig) => {
     return config;
   },
-
-  (error) => Promise.reject(error)
+  (error: AxiosError) => Promise.reject(error),
 );
 
 apiClient.interceptors.response.use(
   (response) => response,
 
-  (error) => Promise.reject(error)
+  async (error: AxiosError) => {
+    if (error.response?.status === 401) {
+      /**
+       * Future:
+       * Refresh session
+       * Logout
+       * Redirect
+       */
+    }
+
+    if (error.response?.status === 403) {
+      /**
+       * Future:
+       * Redirect to 403 page
+       */
+    }
+
+    return Promise.reject(error);
+  },
 );
 
 export default apiClient;

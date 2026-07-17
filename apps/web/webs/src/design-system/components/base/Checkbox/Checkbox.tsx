@@ -5,7 +5,8 @@ import type {
   CheckboxProps,
 } from "./Checkbox.types";
 import { useId } from "react";
-const generatedId = useId();
+
+
 
 
 
@@ -33,8 +34,9 @@ export function Checkbox({
 
   ...props
 }: CheckboxProps) {
+  const generatedId = useId();
   const inputId = id ?? generatedId;
-
+  
   return (
     <div className={wrapperClasses}>
       <div className={containerClasses}>

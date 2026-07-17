@@ -1,2 +1,2 @@
-export * from "./Spinner";
-export * from "./Spinner.types";
+export { Spinner } from "./Spinner";
+export type { SpinnerProps } from "./Spinner";

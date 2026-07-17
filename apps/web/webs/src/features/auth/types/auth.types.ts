@@ -1,34 +1,37 @@
-import type { AuthUser } from "../../../types";
 
 
-export interface RegisterRequest {
+
+
+export interface LoginRequest {
+  email: string;
+  password: string;
+  rememberMe: boolean;
+}
+
+export interface CurrentUser {
+  id: string;
+
   name: string;
 
   email: string;
 
-  password: string;
+  role: string;
+
+  avatar?: string;
+
+  companyId?: string;
 }
 
-export interface LoginRequest {
-  email: string;
-
-  password: string;
-}
-
-export interface AuthTokens {
+export interface LoginResponse {
   accessToken: string;
 
   refreshToken: string;
+
+  user: CurrentUser;
 }
 
-export interface LoginResult {
-  user: AuthUser;
+export interface MeResponse {
+  success: boolean;
 
-  accessToken: string;
-
-  refreshToken: string;
-}
-
-export interface RefreshTokenRequest {
-  refreshToken: string;
+  user: CurrentUser;
 }
