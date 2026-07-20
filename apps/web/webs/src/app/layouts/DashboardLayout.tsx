@@ -1,7 +1,7 @@
 import { Outlet } from "react-router-dom";
+import { Sidebar } from "@/components/navigation/sidebar";
 
-
-
+import { AppHeader } from "@/components/navigation/header";
 export function DashboardLayout() {
   return (
     <div className="flex min-h-screen bg-neutral-50 dark:bg-neutral-950">
@@ -15,7 +15,7 @@ export function DashboardLayout() {
           </div>
 
           <div className="flex-1 p-4">
-            Sidebar (Coming Soon)
+            <Sidebar/>
           </div>
         </div>
       </aside>
@@ -24,13 +24,7 @@ export function DashboardLayout() {
       <div className="flex min-w-0 flex-1 flex-col">
         {/* Header */}
         <header className="sticky top-0 z-20 h-16 border-b border-neutral-200 bg-white/80 backdrop-blur-md dark:border-neutral-800 dark:bg-neutral-900/80">
-          <div className="flex h-full items-center justify-between px-6">
-            <h1 className="text-lg font-semibold">
-              Dashboard
-            </h1>
-
-            <div>User Menu</div>
-          </div>
+          check <AppHeader/>
         </header>
 
         {/* Page */}

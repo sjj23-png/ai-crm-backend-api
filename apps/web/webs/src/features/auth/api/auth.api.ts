@@ -1,4 +1,4 @@
-import apiClient from "../../../services/api";
+import {apiClient} from "../../../services/api";
 
 import api from "../../../constants/api";
 

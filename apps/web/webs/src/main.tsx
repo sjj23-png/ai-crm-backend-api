@@ -5,7 +5,7 @@ import { createRoot } from "react-dom/client";
 import { ErrorBoundary } from "./components/feedback";
 import "./index.css";
 import { AppProviders } from "@/app/providers/AppProviders";
-import AppRoutes from "./routes";
+import {AppRouter} from "./app/router/AppRouter";
 
 createRoot(
   document.getElementById("root")!
@@ -13,7 +13,7 @@ createRoot(
   <StrictMode>
     <ErrorBoundary>
       <AppProviders>
-        <AppRoutes />
+        <AppRouter />
       </AppProviders>
 
     </ErrorBoundary>

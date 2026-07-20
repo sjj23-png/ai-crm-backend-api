@@ -2,17 +2,17 @@ import { Navigate, Route, Routes } from "react-router-dom";
 
 import { AuthLayout } from "../layouts/AuthLayout";
 import { DashboardLayout } from "../layouts/DashboardLayout";
-
-import { GuestRoute } from "../guards/GuestRoute";
-import { ProtectedRoute } from "../guards/ProtectedRoute";
+import { DashboardHome } from "@/pages/dashboard";
+import GuestRoute from "../guards/GuestRoute";
+import ProtectedRoute from "../guards/ProtectedRoute";
 
 function LoginPage() {
   return <div className="p-8">Login Page (Coming Soon)</div>;
 }
 
-function DashboardPage() {
-  return <div className="p-8">Dashboard (Coming Soon)</div>;
-}
+// function DashboardPage() {
+//   return <div className="p-8"><DashboardHome/></div>;
+// }
 
 function NotFoundPage() {
   return (
@@ -32,14 +32,16 @@ export function AppRouter() {
       </Route>
 
       <Route element={<ProtectedRoute />}>
-        <Route element={<DashboardLayout />}>
-          <Route path="/" element={<DashboardPage />} />
+        <Route path="/dashboard" element={<DashboardLayout />}>
+          <Route index element={<DashboardHome />} />
         </Route>
       </Route>
 
+
+      <Route path="/" element={<Navigate to="/dashboard" replace />} />
       <Route path="*" element={<NotFoundPage />} />
 
-      <Route path="" element={<Navigate to="/" replace />} />
+
     </Routes>
   );
 }

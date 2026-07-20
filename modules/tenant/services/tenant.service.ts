@@ -4,7 +4,7 @@ import { TenantRepository } from "../repositories/tenant.repository";
 export class TenantService {
   private readonly repository = new TenantRepository();
 
-  async create(data: CreateTenantDto) {
+  async create(dto: CreateTenantDto) {
     const existing = await this.repository.findByCode(data.code);
 
     if (existing) {
