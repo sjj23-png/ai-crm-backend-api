@@ -5,19 +5,19 @@ import api from "../../../constants/api";
 import type {
   LoginRequest,
   RegisterRequest,
-  RefreshTokenRequest,
+  // RefreshTokenRequest,
 } from "../types/auth.types";
 
 const authApi = {
-  register(data: RegisterRequest) {
+  registerApi(data: RegisterRequest) {
     return apiClient.post(api.auth.register, data);
   },
 
-  login(data: LoginRequest) {
+  loginApi(data: LoginRequest) {
     return apiClient.post(api.auth.login, data);
   },
 
-  logout() {
+  logoutApi() {
     return apiClient.post(api.auth.logout);
   },
 
@@ -25,9 +25,9 @@ const authApi = {
     return apiClient.get(api.auth.me);
   },
 
-  refresh(data: RefreshTokenRequest) {
-    return apiClient.post(api.auth.refresh, data);
-  },
+  // refresh(data: RefreshTokenRequest) {
+  //   return apiClient.post(api.auth.refresh, data);
+  // },
 };
 
 export default authApi;

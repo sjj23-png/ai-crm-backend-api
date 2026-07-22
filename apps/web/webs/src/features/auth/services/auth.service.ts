@@ -1,10 +1,7 @@
 import storageService from "@/services/storage";
 
-import {
-  loginApi,
-  logoutApi,
-  getCurrentUserApi,
-} from "../api";
+
+import authApi from "../api";
 
 import type {
   LoginRequest,
@@ -16,7 +13,8 @@ class AuthService {
   async login(
     payload: LoginRequest,
   ): Promise<LoginResponse> {
-    const response = await loginApi(payload);
+    
+    const response = await authApi.loginApi(payload);
 
     storageService.setAccessToken(
       response.accessToken,
@@ -36,7 +34,7 @@ class AuthService {
 
   async logout(): Promise<void> {
     try {
-      await logoutApi();
+      await authApi.logoutApi();
     } finally {
       storageService.removeAccessToken();
 
@@ -48,9 +46,9 @@ class AuthService {
     }
   }
 
-  async getCurrentUser(): Promise<MeResponse> {
-    return getCurrentUserApi();
-  }
+  // async getCurrentUser(): Promise<MeResponse> {
+  //   return getCurrentUserApi();
+  // }
 
   isAuthenticated(): boolean {
     return storageService.has("access_token");

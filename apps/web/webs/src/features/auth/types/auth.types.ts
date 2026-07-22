@@ -35,3 +35,53 @@ export interface MeResponse {
 
   user: CurrentUser;
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+export interface RegisterRequest {
+  // Organization
+  name: string;
+  code?: string;
+  email: string;
+  phone?: string;
+  website?: string;
+
+  // Owner Account
+  ownerName: string;
+  ownerEmail: string;
+  password: string;
+  confirmPassword: string;
+
+  // Company Logo
+  logo?: File;
+
+  // UI Only
+  terms: boolean;
+}
+export interface RegisterResponse {
+  success: boolean;
+  message: string;
+
+  tenant: {
+    id: string;
+    name: string;
+    code?: string;
+    email: string;
+  };
+
+  owner: {
+    id: string;
+    name: string;
+    email: string;
+  };
+}

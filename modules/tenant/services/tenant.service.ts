@@ -4,14 +4,15 @@ import { TenantRepository } from "../repositories/tenant.repository";
 export class TenantService {
   private readonly repository = new TenantRepository();
 
-  async create(dto: CreateTenantDto) {
-    const existing = await this.repository.findByCode(data.code);
+  async createTenant(data: CreateTenantDto) {
+      const existingTenant = await this.repository.findByEmail(data.email);
 
-    if (existing) {
-      throw new Error("Tenant code already exists.");
+    if (existingTenant) {
+      throw new Error("Tenant already exists.");
     }
 
     return this.repository.create(data);
+  
   }
 
 
@@ -20,11 +21,7 @@ export class TenantService {
 
   async update(
     id: string,
-    data: {
-      name?: string;
-      code?: string;
-      domain?: string;
-    }
+    data: CreateTenantDto
   ) {
     const tenant = await this.repository.findById(id);
 
@@ -37,13 +34,13 @@ export class TenantService {
       data.code !== tenant.code
     ) {
       const existing =
-        await this.repository.findByCode(
-          data.code
+        await this.repository.findByEmail(
+          data.email
         );
 
       if (existing) {
         throw new Error(
-          "Tenant code already exists."
+          "Tenant with this email already exists."
         );
       }
     }

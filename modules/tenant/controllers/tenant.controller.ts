@@ -1,18 +1,31 @@
 import { Request, Response } from "express";
 import { TenantService } from "../services/tenant.service";
+import { CreateTenantSchema } from "../dto/create-tenant.dto";
 
 export class TenantController {
   private readonly service = new TenantService();
 
   create = async (req: Request, res: Response) => {
-    try {
-      const tenant = await this.service.create(req.body);
+   try {
 
-      return res.status(201).json(tenant);
+      const data =
+        CreateTenantSchema.parse(req.body);
+
+      const tenant =
+        await this.service.createTenant(data);
+
+      return res.status(201).json({
+        success: true,
+        data: tenant,
+      });
+
     } catch (error: any) {
+
       return res.status(400).json({
+        success: false,
         message: error.message,
       });
+
     }
   };
 

@@ -6,6 +6,7 @@ import cookieParser from "cookie-parser";
 
 import { globalErrorHandler } from "../../../shared/errors/global-error.handler";
 
+import path from "node:path";
 import routes from "./routes";
 
 const app = express();
@@ -18,6 +19,10 @@ app.use(helmet());
 app.use(compression());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+app.use(
+    "/uploads",
+    express.static(path.join(process.cwd(), "uploads"))
+);
 app.use(cookieParser());
 
 // ======================

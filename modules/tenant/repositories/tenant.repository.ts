@@ -1,19 +1,18 @@
 import prisma from "../../../database/prisma.service";
+import { CreateTenantDto } from "../dto/create-tenant.dto";
 
 export class TenantRepository {
-  async create(data: {
-    name: string;
-    code: string;
-    domain?: string;
-  }) {
+    async create(data: CreateTenantDto) {
     return prisma.tenant.create({
       data,
     });
   }
 
-  async findByCode(code: string) {
+  async findByEmail(email: string) {
     return prisma.tenant.findUnique({
-      where: { code },
+      where: { 
+        email, 
+      },
     });
   }
 

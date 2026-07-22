@@ -1,14 +1,17 @@
 import { Navigate, Route, Routes } from "react-router-dom";
 
+
 import { AuthLayout } from "../layouts/AuthLayout";
 import { DashboardLayout } from "../layouts/DashboardLayout";
 import { DashboardHome } from "@/pages/dashboard";
 import GuestRoute from "../guards/GuestRoute";
+
 import ProtectedRoute from "../guards/ProtectedRoute";
 
-function LoginPage() {
-  return <div className="p-8">Login Page (Coming Soon)</div>;
-}
+import LoginPage from "@/pages/auth/LoginPage";
+// function LoginPage() {
+//   return <div className="p-8">Login Page (Coming Soon)</div>;
+// }
 
 // function DashboardPage() {
 //   return <div className="p-8"><DashboardHome/></div>;

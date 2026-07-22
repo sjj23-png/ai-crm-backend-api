@@ -1,5 +1,7 @@
 import { Router } from "express";
 
+
+import { uploadTenantLogo } from "../storage/middleware/upload.middleware";
 import { authGuard }
 from "../../shared/guards/auth.guard";
 
@@ -23,9 +25,10 @@ const controller =
   new TenantController();
 
 router.post(
-  "/",
-  authGuard,
-  validate(createTenantSchema),
+  "/register",
+
+  uploadTenantLogo.single("logo"),
+
   controller.create
 );
 

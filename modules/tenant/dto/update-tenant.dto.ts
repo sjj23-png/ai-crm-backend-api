@@ -1,5 +1,7 @@
-export interface UpdateTenantDto {
-  name?: string;
-  code?: string;
-  domain?: string;
-}
+import { z } from "zod";
+import { CreateTenantSchema } from "./create-tenant.dto";
+
+
+export const UpdateTenantSchema = CreateTenantSchema.partial();
+
+export type UpdateTenantDto = z.infer<typeof UpdateTenantSchema>;

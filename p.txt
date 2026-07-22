@@ -315,3 +315,7 @@ router.delete(
 );
 
 export default router;
+
+
+
+mkdir uploads\user-avatars uploads\lead-attachments uploads\company-documents uploads\temp modules\storage\controllers modules\storage\services modules\storage\middleware modules\storage\routes modules\storage\constants modules\storage\utils && type nul > modules\storage\controllers\storage.controller.ts && type nul > modules\storage\services\storage.service.ts && type nul > modules\storage\middleware\upload.middleware.ts && type nul > modules\storage\routes\storage.routes.ts && type nul > modules\storage\constants\upload.constants.ts && type nul > modules\storage\utils\file.utils.ts && type nul > modules\storage\index.ts
