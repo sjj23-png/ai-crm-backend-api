@@ -5,7 +5,7 @@
 export interface LoginRequest {
   email: string;
   password: string;
-  rememberMe: boolean;
+  rememberMe?: boolean;
 }
 
 export interface CurrentUser {

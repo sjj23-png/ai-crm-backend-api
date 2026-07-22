@@ -47,7 +47,10 @@ const buttonVariants = cva(
 
 export interface ButtonProps
   extends React.ButtonHTMLAttributes<HTMLButtonElement>,
-    VariantProps<typeof buttonVariants> {}
+    VariantProps<typeof buttonVariants> {
+     loading?: boolean;
+     loadingText?: string;
+    }
 
 export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
   (
