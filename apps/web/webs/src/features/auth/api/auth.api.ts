@@ -7,6 +7,17 @@ import type {
   RegisterRequest,
   // RefreshTokenRequest,
 } from "../types/auth.types";
+import type { LoginResponse } from "@/types";
+
+
+
+
+
+
+
+
+
+
 
 const authApi = {
   registerApi(data: RegisterRequest) {
@@ -14,7 +25,7 @@ const authApi = {
   },
 
   loginApi(data: LoginRequest) {
-    return apiClient.post(api.auth.login, data);
+    return apiClient.post(api.auth.login, data)
   },
 
   logoutApi() {

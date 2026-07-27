@@ -17,19 +17,19 @@ class AuthService {
     const response = await authApi.loginApi(payload);
 
     storageService.setAccessToken(
-      response.accessToken,
+      response.data.user,
     );
 
     storageService.setRefreshToken(
-      response.refreshToken,
+      response.data.refreshToken,
     );
 
     storageService.set(
       "crm_user",
-      response.user,
+      response.data.user,
     );
 
-    return response;
+    return response.data;
   }
 
   async logout(): Promise<void> {

@@ -1,9 +1,9 @@
 
 
 
+@import "tailwindcss";
 
-*,
-*::before,
+/* *::before,
 *::after {
   box-sizing: border-box;
   margin: 0;
@@ -12,9 +12,9 @@
 
 html {
   scroll-behavior: smooth;
-}
+} */
 
-body {
+/* body {
   min-height: 100vh;
   font-family:
     Inter,
@@ -22,11 +22,11 @@ body {
     Roboto,
     sans-serif;
   background: #ffffff;
-  color: #111827;
+  
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
-}
-
+} */
+/* 
 button,
 input,
 textarea,
@@ -51,4 +51,4 @@ ol {
 
 #root {
   min-height: 100vh;
-}
+} */

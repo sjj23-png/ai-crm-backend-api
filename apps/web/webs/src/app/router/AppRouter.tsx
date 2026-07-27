@@ -17,6 +17,8 @@ import LoginPage from "@/pages/auth/LoginPage";
 //   return <div className="p-8"><DashboardHome/></div>;
 // }
 
+
+import SignupPage from "@/pages/auth/Signup";
 function NotFoundPage() {
   return (
     <div className="flex min-h-screen items-center justify-center text-xl font-semibold">
@@ -33,6 +35,12 @@ export function AppRouter() {
           <Route path="/login" element={<LoginPage />} />
         </Route>
       </Route>
+       <Route element={<GuestRoute />}>
+        <Route element={<AuthLayout />}>
+          <Route path="/register" element={<SignupPage />} />
+        </Route>
+      </Route>
+
 
       <Route element={<ProtectedRoute />}>
         <Route path="/dashboard" element={<DashboardLayout />}>
