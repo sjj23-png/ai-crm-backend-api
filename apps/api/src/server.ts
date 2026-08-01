@@ -2,7 +2,7 @@ import app from "./app";
 import { env } from "../../../config/environment/env";
 import logger from "../../../shared/logger/logger";
 
-const PORT = env.PORT || 3001;
+const PORT = env.PORT || 4001;
 
 const server = app.listen(PORT, () => {
   logger.info(`🚀 Server running on port ${PORT}`);

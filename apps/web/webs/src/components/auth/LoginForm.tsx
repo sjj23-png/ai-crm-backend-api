@@ -1,7 +1,7 @@
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 import authConfig from "@/config/auth.config";
 
@@ -47,7 +47,7 @@ export default function LoginForm() {
 
 
 
-  
+
   const login = useLogin();
 
   const {
@@ -97,6 +97,7 @@ export default function LoginForm() {
           <Input
             label="Email Address"
             type="email"
+            size="lg"
             autoComplete="email"
             error={errors.email?.message}
             {...register("email")}
@@ -124,6 +125,7 @@ export default function LoginForm() {
             Sign In
           </Button>
         </form>
+        <span> <Link to="/register">  Register</Link> </span>
       </CardContent>
     </Card>
   );

@@ -7,7 +7,7 @@ export function PageLoader({
   backdrop = true,
   className = "",
 }: PageLoaderProps) {
-  const theme = useTheme();
+  const { theme, isDark } = useTheme();
 
   return (
     <div
@@ -24,7 +24,7 @@ export function PageLoader({
         className="rounded-lg p-8 flex flex-col items-center gap-4"
         style={{
           backgroundColor: theme.colors.surface,
-          boxShadow: theme.isDark
+          boxShadow: isDark
             ? "0 10px 30px rgba(0, 0, 0, 0.5)"
             : "0 10px 30px rgba(0, 0, 0, 0.1)",
         }}
@@ -34,7 +34,7 @@ export function PageLoader({
           <p
             className="text-sm font-medium"
             style={{
-              color: theme.colors.text.secondary,
+              color: theme.colors.textSecondary,
             }}
           >
             {message}

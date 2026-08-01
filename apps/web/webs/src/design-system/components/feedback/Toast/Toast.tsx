@@ -1,27 +1,23 @@
 import { useEffect, useState } from "react";
 import type { ToastProps } from "./Toast.types";
-import { useTheme } from "../../theme/use-theme";
+import { useTheme } from "../../../theme/use-theme";
 
 const variantStyles = {
   success: {
-    bg: "successBg",
-    border: "success.500",
-    text: "successText",
+    borderKey: "success" as const,
+    textKey: "textPrimary" as const,
   },
   error: {
-    bg: "errorBg",
-    border: "danger.500",
-    text: "errorText",
+    borderKey: "danger" as const,
+    textKey: "textPrimary" as const,
   },
   warning: {
-    bg: "warningBg",
-    border: "warning.500",
-    text: "warningText",
+    borderKey: "warning" as const,
+    textKey: "textPrimary" as const,
   },
   info: {
-    bg: "infoBg",
-    border: "info",
-    text: "infoText",
+    borderKey: "info" as const,
+    textKey: "textPrimary" as const,
   },
 };
 
@@ -45,7 +41,7 @@ export function Toast({
   className = "",
 }: ToastProps) {
   const [isVisible, setIsVisible] = useState(true);
-  const theme = useTheme();
+  const { theme } = useTheme();
 
   useEffect(() => {
     if (duration === null) return;
@@ -77,10 +73,8 @@ export function Toast({
         ${className}
       `}
       style={{
-        backgroundColor:
-          theme.colors[styles.bg as keyof typeof theme.colors],
-        borderLeftColor:
-          theme.colors[styles.border as keyof typeof theme.colors],
+        backgroundColor: theme.colors.surface,
+        borderLeftColor: theme.colors[styles.borderKey],
       }}
     >
       <div className="flex items-start justify-between gap-3">
@@ -89,10 +83,7 @@ export function Toast({
             <h4
               className="font-semibold mb-1"
               style={{
-                color:
-                  theme.colors[
-                    styles.text as keyof typeof theme.colors
-                  ],
+                color: theme.colors[styles.textKey],
               }}
             >
               {title}
@@ -101,10 +92,7 @@ export function Toast({
           <p
             className="text-sm"
             style={{
-              color:
-                theme.colors[
-                  styles.text as keyof typeof theme.colors
-                ],
+              color: theme.colors.textSecondary,
             }}
           >
             {message}
@@ -116,10 +104,7 @@ export function Toast({
             className="flex-shrink-0 opacity-60 hover:opacity-100 transition-opacity"
             aria-label="Close toast"
             style={{
-              color:
-                theme.colors[
-                  styles.text as keyof typeof theme.colors
-                ],
+              color: theme.colors.textSecondary,
             }}
           >
             ✕

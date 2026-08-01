@@ -224,9 +224,9 @@ export default function RegisterPage() {
 
           </form>
 
-          <div className="mt-6 text-center text-sm">
+          <div className="mt-6 text-center text-red-50 text-sm">
 
-            Already have an account?
+           <span className="text-amber-50"> Already have an account?</span>
 
             <Link
               to="/login"

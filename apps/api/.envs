@@ -1,0 +1,14 @@
+JWT_SECRET=57d18bbb9c4e99fa13fc1ea83306f3c162c5b25b30661b11a22c701d1204623b
+
+
+# Connect to Postgres via the shared transaction-mode pooler (IPv4-only)
+DATABASE_URL="postgresql://postgres.pmkraldaqxtmnerbzltb:SA14SK1R!:jk@aws-1-ap-southeast-1.pooler.supabase.com:6543/postgres?pgbouncer=true"
+
+# Connect to Postgres via the shared session-mode pooler (used for migrations)
+DIRECT_URL="postgresql://postgres.pmkraldaqxtmnerbzltb:SA14SK1R!:jk@aws-1-ap-southeast-1.pooler.supabase.com:5432/postgres"
+
+
+JWT_EXPIRES_IN=7d
+BCRYPT_SALT=10
+
+NODE_ENV = development

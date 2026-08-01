@@ -49,25 +49,25 @@ router.get("/", (req, res) => {
   });
 });
 router.use("/auth", authRoutes);
-router.use("/tenants", tenantModule);
-router.use("/organizations", organizationModule);
-router.use("/departments", departmentModule);
-router.use("/teams", teamModule);
-router.use("/users", userModule);
-router.use("/roles", roleModule);
-router.use("/permissions", permissionModule);
-router.use("/companies", companyModule);
-router.use("/contacts", contactModule);
-router.use("/leads", leadModule);
-router.use("/pipelines", pipelineModule);
-router.use("/stages", stageModule);
-router.use("/deals", dealModule);
-router.use("/activities", activityModule);
-router.use("/tasks", taskModule);
-router.use("/notes", noteModule);
-router.use("/tags", tagModule);
-router.use("/communications", communicationModule);
-router.use("/notifications", notificationModule);
+// router.use("/tenants", tenantModule);
+// router.use("/organizations", organizationModule);
+// router.use("/departments", departmentModule);
+// router.use("/teams", teamModule);
+// router.use("/users", userModule);
+// router.use("/roles", roleModule);
+// router.use("/permissions", permissionModule);
+// router.use("/companies", companyModule);
+// router.use("/contacts", contactModule);
+// router.use("/leads", leadModule);
+// router.use("/pipelines", pipelineModule);
+// router.use("/stages", stageModule);
+// router.use("/deals", dealModule);
+// router.use("/activities", activityModule);
+// router.use("/tasks", taskModule);
+// router.use("/notes", noteModule);
+// router.use("/tags", tagModule);
+// router.use("/communications", communicationModule);
+// router.use("/notifications", notificationModule);
 
 
 

@@ -3,7 +3,7 @@ import { Moon, Sun } from "lucide-react";
 import { useTheme } from "@/design-system/theme";
 
 export default function ThemeToggle() {
-  const { theme, toggleTheme } =
+  const { isDark, toggleTheme } =
     useTheme();
 
   return (
@@ -23,7 +23,7 @@ export default function ThemeToggle() {
       "
       aria-label="Toggle theme"
     >
-      {theme === "dark" ? (
+      {isDark ? (
         <Sun size={18} />
       ) : (
         <Moon size={18} />

@@ -24,7 +24,7 @@ app.use(
     express.static(path.join(process.cwd(), "uploads"))
 );
 app.use(cookieParser());
-
+app.use(globalErrorHandler);
 // ======================
 // BASE ROUTES
 // ======================
@@ -43,6 +43,6 @@ app.get("/health", (req, res) => {
 // ======================
 // GLOBAL ERROR HANDLER
 // ======================
-app.use(globalErrorHandler);
+
 
 export default app;

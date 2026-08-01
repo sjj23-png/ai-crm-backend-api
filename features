@@ -1,0 +1,176 @@
+Authentication
+│
+├── Public Registration
+├── Login
+├── Logout
+├── Forgot Password
+├── Reset Password
+├── Email Verification
+├── Refresh Token
+├── Current User
+├── Protected Routes
+├── Guest Routes
+└── Session Management
+
+Tenant Management
+│
+├── Create Tenant
+├── Update Tenant
+├── Tenant Profile
+├── Tenant Logo
+├── Tenant Settings
+└── Tenant Status
+
+Company Management
+│
+├── Create Company
+├── Company Profile
+├── Company Owner
+├── Company Documents
+├── Company Logo
+└── Company Settings
+
+RBAC
+│
+├── Roles
+├── Permissions
+├── User Permissions
+├── Role Permissions
+└── Access Control
+
+User Management
+│
+├── Create User
+├── Update User
+├── Invite User
+├── User Profile
+├── User Status
+├── User Avatar
+└── User Activity
+
+Organization
+│
+├── Departments
+├── Designations
+├── Teams
+├── Team Lead
+└── Reporting Structure
+
+Lead Management
+│
+├── Create Lead
+├── Assign Lead
+├── Lead Source
+├── Lead Status
+├── Lead Tags
+├── Lead Notes
+├── Lead Timeline
+└── Lead History
+
+Contact Management
+│
+├── Contacts
+├── Contact Company
+├── Contact Communication
+├── Contact Timeline
+└── Contact Notes
+
+Pipeline Management
+│
+├── Pipelines
+├── Stages
+├── Drag & Drop
+├── Probability
+└── Stage Automation
+
+Task Management
+│
+├── Tasks
+├── Assign Task
+├── Due Date
+├── Priority
+├── Checklist
+├── Comments
+└── Attachments
+
+Activity Management
+│
+├── Calls
+├── Meetings
+├── Emails
+├── Notes
+├── Timeline
+└── Activity Log
+
+Communication
+│
+├── Email
+├── SMS
+├── WhatsApp
+├── Internal Messages
+└── Communication History
+
+Notification System
+│
+├── In App
+├── Email
+├── Push
+├── Reminder
+└── Notification Preferences
+
+File Storage
+│
+├── Upload
+├── Download
+├── Preview
+├── Delete
+├── Versioning
+└── Cloud Storage
+
+Audit System
+│
+├── Login Logs
+├── CRUD Logs
+├── Security Logs
+├── User Activity
+└── Export Logs
+
+Dashboard
+│
+├── KPI Cards
+├── Charts
+├── Recent Activities
+├── Sales Funnel
+├── Lead Summary
+├── Tasks
+└── Notifications
+
+Reports
+│
+├── Sales
+├── Leads
+├── Users
+├── Companies
+├── Tasks
+├── Activities
+└── Export
+
+Settings
+│
+├── General
+├── Branding
+├── Email
+├── Security
+├── Integrations
+└── Preferences
+
+AI Features
+│
+├── Lead Scoring
+├── Lead Suggestions
+├── Smart Search
+├── AI Chat
+├── Email Generator
+├── Task Suggestions
+├── Sales Prediction
+└── AI Reports

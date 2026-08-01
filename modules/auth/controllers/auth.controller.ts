@@ -1,3 +1,17 @@
+/**
+ * ============================================================================
+ * FILE ROLE: Backend Auth Controller (HTTP Layer)
+ * 
+ * CONNECTED FILES:
+ *  - Called by / Imported in: modules/auth/auth.routes.ts
+ *  - Calls / Imports: modules/auth/services/auth.service.ts (AuthService), express (Request, Response)
+ * 
+ * DATA FLOW:
+ *  - Inputs: Express HTTP Request (req.body containing credentials/DTOs, req.headers for token)
+ *  - Outputs: Express HTTP Response (res.status().json() containing tokens, user object, or error messages)
+ * ============================================================================
+ */
+
 import { Request, Response } from "express";
 import { AuthService } from "../services/auth.service";
 

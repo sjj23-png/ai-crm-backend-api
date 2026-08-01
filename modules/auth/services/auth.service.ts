@@ -1,3 +1,17 @@
+/**
+ * ============================================================================
+ * FILE ROLE: Backend Auth Service (Business Domain Layer)
+ * 
+ * CONNECTED FILES:
+ *  - Called by / Imported in: modules/auth/controllers/auth.controller.ts
+ *  - Calls / Imports: modules/auth/repositories/auth.repository.ts (AuthRepository), jwt.util.ts, bcrypt
+ * 
+ * DATA FLOW:
+ *  - Inputs: DTO payloads (LoginDto, RegisterDto), token strings, user ID strings
+ *  - Outputs: Auth data objects ({ accessToken, refreshToken, user }), user profile objects, or throws Errors
+ * ============================================================================
+ */
+
 import bcrypt from "bcrypt";
 import { AuthRepository } from "../repositories/auth.repository";
 import { LoginDto } from "../dto/login.dto";

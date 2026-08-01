@@ -1,5 +1,18 @@
-import storageService from "@/services/storage";
+/**
+ * ============================================================================
+ * FILE ROLE: Frontend Auth Service
+ * 
+ * CONNECTED FILES:
+ *  - Called by / Imported in: useLogin.ts, useAuth.ts, AuthContext.tsx
+ *  - Calls / Imports: auth.api.ts (authApi), storage.service.ts (storageService), auth.types.ts
+ * 
+ * DATA FLOW:
+ *  - Inputs: LoginRequest payload ({ email, password, rememberMe })
+ *  - Outputs: LoginResponse object ({ accessToken, refreshToken, user }), stores tokens in localStorage
+ * ============================================================================
+ */
 
+import storageService from "@/services/storage";
 
 import authApi from "../api";
 
@@ -13,11 +26,11 @@ class AuthService {
   async login(
     payload: LoginRequest,
   ): Promise<LoginResponse> {
-    
+
     const response = await authApi.loginApi(payload);
 
     storageService.setAccessToken(
-      response.data.user,
+      response.data.accessToken,
     );
 
     storageService.setRefreshToken(

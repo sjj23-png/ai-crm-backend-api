@@ -18,7 +18,7 @@ function getEnv(key: string, required = true): string {
 
 export const env = {
   NODE_ENV: getEnv("NODE_ENV"),
-  PORT: parseInt(getEnv("PORT", false)) || 3001,
+  PORT: parseInt(getEnv("PORT", false)) || 4001,
 
   JWT_SECRET: getEnv("JWT_SECRET"),
   JWT_EXPIRES_IN:  getEnv("JWT_EXPIRES_IN") as SignOptions["expiresIn"],

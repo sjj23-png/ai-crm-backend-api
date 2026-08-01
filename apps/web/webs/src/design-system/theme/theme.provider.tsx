@@ -34,7 +34,7 @@ export function ThemeProvider({
     }
 
     return window.matchMedia(
-      "(prefers-color-scheme: dark)"
+      "(prefers-color-scheme: light)"
     ).matches
       ? "dark"
       : "light";

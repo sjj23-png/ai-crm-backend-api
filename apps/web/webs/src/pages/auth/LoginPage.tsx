@@ -5,7 +5,7 @@ import LoginHero from "@/components/auth/LoginHero";
 
 export default function LoginPage() {
   return (
-    <main className="grid min-h-screen grid-cols-1 bg-background lg:grid-cols-2">
+    <main className="grid min-h-screen grid-cols-2 bg-background lg:grid-cols-2">
       <section className="hidden bg-muted px-16 lg:flex">
         <LoginHero />
       </section>
