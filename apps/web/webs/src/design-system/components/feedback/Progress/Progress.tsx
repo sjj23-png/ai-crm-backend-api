@@ -1,6 +1,7 @@
 import type {
   ProgressProps,
 } from "./Progress.types";
+import { cn } from "@/lib/utils/cn";
 
 import {
   wrapperClasses,
@@ -32,22 +33,20 @@ export function Progress({
   return (
     <div
       ref={ref}
-      className={[
+      className={cn(
         wrapperClasses,
         className,
-      ].join(" ")}
+      )}
       {...props}
     >
       <div
         className={trackClasses}
       >
         <div
-          className={[
+          className={cn(
             fillClasses,
-            animated
-              ? "transition-all duration-500"
-              : "",
-          ].join(" ")}
+            animated && "transition-all duration-500",
+          )}
           style={{
             width: `${percentage}%`,
           }}

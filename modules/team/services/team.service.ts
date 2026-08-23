@@ -14,16 +14,18 @@ export class TeamService {
     dto: CreateTeamDto
   ) {
 
-    const existingTeam =
-      await this.repository.findByDepartmentAndName(
-        dto.departmentId,
-        dto.name
-      );
+    if (dto.departmentId) {
+      const existingTeam =
+        await this.repository.findByDepartmentAndName(
+          dto.departmentId,
+          dto.name
+        );
 
-    if (existingTeam) {
-      throw new Error(
-        "Team already exists in this department."
-      );
+      if (existingTeam) {
+        throw new Error(
+          "Team already exists in this department."
+        );
+      }
     }
 
     return this.repository.create(

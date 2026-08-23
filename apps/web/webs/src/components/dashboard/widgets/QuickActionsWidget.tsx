@@ -2,6 +2,7 @@
 
 
 
+import { useNavigate } from "react-router-dom";
 import {
   Plus,
   Users,
@@ -16,30 +17,36 @@ const actions = [
   {
     id: 1,
     label: "New Lead",
+    path: "/dashboard/companies",
     icon: Plus,
     variant: "primary" as const,
   },
   {
     id: 2,
-    label: "New Customer",
+    label: "New Contact",
+    path: "/dashboard/contacts",
     icon: Users,
     variant: "secondary" as const,
   },
   {
     id: 3,
-    label: "Create Task",
+    label: "CRM Tasks",
+    path: "/dashboard/crm",
     icon: ClipboardList,
     variant: "outline" as const,
   },
   {
     id: 4,
     label: "Reports",
+    path: "/dashboard/reports",
     icon: BarChart3,
     variant: "ghost" as const,
   },
 ];
 
 export default function QuickActionsWidget() {
+  const navigate = useNavigate();
+
   return (
     <WidgetContainer title="Quick Actions">
       <div className="grid grid-cols-2 gap-3">
@@ -52,6 +59,7 @@ export default function QuickActionsWidget() {
               variant={action.variant}
               fullWidth
               className="justify-start"
+              onClick={() => navigate(action.path)}
             >
               <Icon size={18} />
 

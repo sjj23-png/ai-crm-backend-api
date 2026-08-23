@@ -4,6 +4,7 @@
 import type {
     TypographyProps,
 } from "./Typography.types";
+import { cn } from "@/lib/utils/cn";
 
 import {
     baseClasses,
@@ -51,19 +52,17 @@ export function Typography({
     return (
         <Component
             ref={ref}
-            className={[
+            className={cn(
                 baseClasses,
 
                 variantClasses[variant],
 
                 weightClasses[weight],
 
-                truncate
-                    ? "truncate"
-                    : "",
+                truncate && "truncate",
 
                 className,
-            ].join(" ")}
+            )}
             {...props}
         >
             {children}

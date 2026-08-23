@@ -19,6 +19,9 @@ export class LeadService {
     dto: CreateLeadDto
   ) {
 
+    if (!dto.tenantId) {
+      throw new Error('tenantId is required for lead creation');
+    }
     const existing =
       await this.repository.findByEmail(
         dto.tenantId,
@@ -37,16 +40,13 @@ export class LeadService {
       `LED-${Date.now()}`;
 
     return this.repository.create({
-
       ...dto,
-
+      tenantId: dto.tenantId,
+      ownerId: dto.ownerId || "",
+      teamId: dto.teamId || "",
       publicId,
-
-      status:
-        LeadStatus.NEW,
-
+      status: LeadStatus.NEW,
       score: 0,
-
     });
 
   }

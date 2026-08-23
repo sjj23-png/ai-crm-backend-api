@@ -22,6 +22,7 @@ import tenantModule from "../../../../modules/tenant/tenant.module";
 import organizationModule from "../../../../modules/organization/organization.module";
 import departmentModule from "../../../../modules/department/department.module";
 import teamModule from "../../../../modules/team/team.module";
+import designationModule from "../../../../modules/designation/designation.module";
 
 import userModule from "../../../../modules/user/user.module";
 import roleModule from "../../../../modules/role/role.module";
@@ -49,25 +50,26 @@ router.get("/", (req, res) => {
   });
 });
 router.use("/auth", authRoutes);
-// router.use("/tenants", tenantModule);
-// router.use("/organizations", organizationModule);
-// router.use("/departments", departmentModule);
-// router.use("/teams", teamModule);
-// router.use("/users", userModule);
-// router.use("/roles", roleModule);
-// router.use("/permissions", permissionModule);
-// router.use("/companies", companyModule);
-// router.use("/contacts", contactModule);
-// router.use("/leads", leadModule);
-// router.use("/pipelines", pipelineModule);
-// router.use("/stages", stageModule);
-// router.use("/deals", dealModule);
-// router.use("/activities", activityModule);
-// router.use("/tasks", taskModule);
-// router.use("/notes", noteModule);
-// router.use("/tags", tagModule);
-// router.use("/communications", communicationModule);
-// router.use("/notifications", notificationModule);
+router.use("/tenants", tenantModule);
+router.use("/organizations", organizationModule);
+router.use("/departments", departmentModule);
+router.use("/teams", teamModule);
+router.use("/designations", designationModule);
+router.use("/users", userModule);
+router.use("/roles", roleModule);
+router.use("/permissions", permissionModule);
+router.use("/companies", companyModule);
+router.use("/contacts", contactModule);
+router.use("/leads", leadModule);
+router.use("/pipelines", pipelineModule);
+router.use("/stages", stageModule);
+router.use("/deals", dealModule);
+router.use("/activities", activityModule);
+router.use("/tasks", taskModule);
+router.use("/notes", noteModule);
+router.use("/tags", tagModule);
+router.use("/communications", communicationModule);
+router.use("/notifications", notificationModule);
 
 
 

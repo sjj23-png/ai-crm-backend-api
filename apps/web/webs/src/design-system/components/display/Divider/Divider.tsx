@@ -4,6 +4,7 @@
 import type {
   DividerProps,
 } from "./Divider.types";
+import { cn } from "@/lib/utils/cn";
 
 import {
   wrapperClasses,
@@ -33,12 +34,12 @@ export function Divider({
       <hr
         ref={ref}
         aria-orientation="vertical"
-        className={[
+        className={cn(
           lineClasses,
           orientationClasses.vertical,
           variantClasses[variant],
           className,
-        ].join(" ")}
+        )}
         {...props}
       />
     );
@@ -48,12 +49,12 @@ export function Divider({
     return (
       <hr
         ref={ref}
-        className={[
+        className={cn(
           lineClasses,
           orientationClasses.horizontal,
           variantClasses[variant],
           className,
-        ].join(" ")}
+        )}
         {...props}
       />
     );
@@ -62,12 +63,12 @@ export function Divider({
   return (
     <div className={wrapperClasses}>
       <hr
-        className={[
+        className={cn(
           "flex-1",
           lineClasses,
           orientationClasses.horizontal,
           variantClasses[variant],
-        ].join(" ")}
+        )}
       />
 
       <span className={labelClasses}>
@@ -75,12 +76,12 @@ export function Divider({
       </span>
 
       <hr
-        className={[
+        className={cn(
           "flex-1",
           lineClasses,
           orientationClasses.horizontal,
           variantClasses[variant],
-        ].join(" ")}
+        )}
       />
     </div>
   );

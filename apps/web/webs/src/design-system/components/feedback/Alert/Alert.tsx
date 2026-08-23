@@ -5,6 +5,7 @@ import {
   RiInformationLine,
   RiSpam2Line,
 } from "@remixicon/react";
+import { cn } from "@/lib/utils/cn";
 
 import type {
   AlertProps,
@@ -59,11 +60,11 @@ export function Alert({
     <div
       ref={ref}
       role="alert"
-      className={[
+      className={cn(
         wrapperClasses,
         variantClasses[variant],
         className,
-      ].join(" ")}
+      )}
       {...props}
     >
       <div className={iconClasses}>

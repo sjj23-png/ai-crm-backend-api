@@ -1,4 +1,5 @@
 import { useId } from "react";
+import { cn } from "@/lib/utils/cn";
 
 
 import type {
@@ -40,10 +41,10 @@ export function Radio({
           ref={ref}
           id={inputId}
           type="radio"
-          className={[
+          className={cn(
             radioClasses,
             className,
-          ].join(" ")}
+          )}
           {...props}
         />
 

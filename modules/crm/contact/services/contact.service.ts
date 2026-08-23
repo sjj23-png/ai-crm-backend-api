@@ -16,48 +16,35 @@ export class ContactService {
   async create(
     data: CreateContactDto
   ) {
-
-    const exists =
-      await this.repository.findByEmail(
-
-        data.tenantId,
-
-        data.email
-
-      );
-
-    if (exists) {
-
-      throw new Error(
-        "Contact email already exists."
-      );
-
+    if (!data.tenantId) {
+      throw new Error("Tenant ID is required.");
     }
 
-    const company =
-      await this.companyRepository.findById(
-        data.companyId
-      );
+    const exists = await this.repository.findByEmail(
+      data.tenantId,
+      data.email
+    );
+
+    if (exists) {
+      throw new Error("Contact email already exists.");
+    }
+
+    const company = await this.companyRepository.findById(
+      data.companyId
+    );
 
     if (!company) {
-
-      throw new Error(
-        "Company not found."
-      );
-
+      throw new Error("Company not found.");
     }
 
     return this.repository.create({
-
       ...data,
-
-      publicId:
-        await this.generatePublicId(),
-
+      tenantId: data.tenantId,
+      ownerId: data.ownerId || company.ownerId || "",
+      teamId: data.teamId || company.teamId || "",
+      publicId: await this.generatePublicId(),
       status: "ACTIVE",
-
     });
-
   }
 
   async generatePublicId() {

@@ -1,5 +1,5 @@
 export interface CreateTeamDto {
-  departmentId: string;
+  departmentId?: string;
 
   name: string;
 

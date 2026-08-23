@@ -12,18 +12,18 @@ export default function Sidebar() {
         w-full
         flex-col
         bg-white
-        dark:bg-neutral-900
+        dark:bg-[#0D111A]
       "
     >
       {/* Logo */}
 
-      <div className="border-b border-neutral-200 p-6 dark:border-neutral-800">
-        <h1 className="text-xl font-bold tracking-tight">
+      <div className="border-b border-slate-200 p-6 dark:border-[#1D2738]">
+        <h1 className="text-xl font-extrabold tracking-tight text-slate-900 dark:text-slate-50">
           Enterprise CRM
         </h1>
 
-        <p className="mt-1 text-sm text-neutral-500">
-          AI Powered Platform
+        <p className="mt-1 text-xs font-medium text-purple-600 dark:text-purple-400">
+          AI Powered Platform v2.0
         </p>
       </div>
 

@@ -20,38 +20,32 @@ import {
 export class DealRepository {
 
   async create(
-
-    data:
-    CreateDealDto & {
-
+    data: CreateDealDto & {
       publicId: string;
-
+      tenantId: string;
+      stageId: string;
       status: DealStatus;
-
     }
-
   ) {
-
     return prisma.deal.create({
-
-      data,
-
-      include: {
-
-        company: true,
-
-        contact: true,
-
-        stage: true,
-
-        pipeline: true,
-
-        tags: true,
-
+      data: {
+        publicId: data.publicId,
+        tenantId: data.tenantId,
+        stageId: data.stageId,
+        pipelineId: data.pipelineId,
+        title: data.title,
+        value: data.value,
+        currency: data.currency ?? "INR",
+        status: data.status,
       },
-
+      include: {
+        company: true,
+        contact: true,
+        stage: true,
+        pipeline: true,
+        tags: true,
+      },
     });
-
   }
 
   async findById(
@@ -89,25 +83,15 @@ export class DealRepository {
   }
 
   async findByTitle(
-
     tenantId: string,
-
     title: string
-
   ) {
-
     return prisma.deal.findFirst({
-
       where: {
-
         tenantId,
-
         title,
-
       },
-
     });
-
   }
 
   async findAll(

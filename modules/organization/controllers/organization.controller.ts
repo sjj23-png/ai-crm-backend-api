@@ -1,85 +1,48 @@
-import {
-  Request,
-  Response,
-} from "express";
-
+import { Request, Response } from "express";
 import { OrganizationService } from "../services/organization.service";
+import { UpdateUserOrganizationSchema } from "../dto/update-user-organization.dto";
 
 export class OrganizationController {
+  private service = new OrganizationService();
 
-  private service =
-    new OrganizationService();
-
-  create = async (
-    req: Request,
-    res: Response
-  ) => {
-
-    const result =
-      await this.service.create(
-        req.tenantId!,
-        req.body
+  assign = async (req: Request, res: Response) => {
+    try {
+      const data = UpdateUserOrganizationSchema.parse(req.body);
+      const result = await this.service.assign(
+        req.user!.tenantId,
+        req.params.userId as string,
+        data
       );
 
-    return res.status(201).json(result);
-
+      return res.json({
+        success: true,
+        message: "User organization settings updated successfully.",
+        data: result,
+      });
+    } catch (error: any) {
+      return res.status(400).json({
+        success: false,
+        message: error.message,
+      });
+    }
   };
 
-  getAll = async (
-    req: Request,
-    res: Response
-  ) => {
-
-    const result =
-      await this.service.getAll(
-        req.tenantId!
+  hierarchy = async (req: Request, res: Response) => {
+    try {
+      const result = await this.service.getHierarchy(
+        req.user!.tenantId,
+        req.params.userId as string
       );
 
-    return res.json(result);
-
+      return res.json({
+        success: true,
+        data: result,
+      });
+    } catch (error: any) {
+      return res.status(400).json({
+        success: false,
+        message: error.message,
+      });
+    }
   };
-
-  getById = async (
-    req: Request,
-    res: Response
-  ) => {
-
-    const result =
-      await this.service.getById(
-        req.params.id as string
-      );
-
-    return res.json(result);
-
-  };
-
-  update = async (
-    req: Request,
-    res: Response
-  ) => {
-
-    const result =
-      await this.service.update(
-        req.params.id  as string,
-        req.body
-      );
-
-    return res.json(result);
-
-  };
-
-  delete = async (
-    req: Request,
-    res: Response
-  ) => {
-
-    const result =
-      await this.service.delete(
-        req.params.id as string
-      );
-
-    return res.json(result);
-
-  };
-
 }

@@ -15,9 +15,10 @@ export class ContactController {
     try {
 
       const result =
-        await this.service.create(
-          req.body
-        );
+        await this.service.create({
+          ...req.body,
+          tenantId: req.user!.tenantId,
+        });
 
       return res.status(201).json(result);
 

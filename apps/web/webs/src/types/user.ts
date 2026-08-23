@@ -6,5 +6,15 @@ export interface User extends BaseEntity {
 
   email: string;
 
-  role: string;
+  role: any;
+
+  roleId?: string;
+
+  departmentId?: string | null;
+
+  designationId?: string | null;
+
+  teamId?: string | null;
+
+  managerId?: string | null;
 }

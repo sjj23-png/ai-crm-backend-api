@@ -3,7 +3,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 
-import {apiClient} from "@/services/api";
+import { apiClient } from "@/services/api";
 import api from "@/constants/api";
 
 import {
@@ -103,112 +103,139 @@ export default function RegisterPage() {
 
       setServerError(
         error?.response?.data?.message ??
-          "Registration failed",
+        "Registration failed",
       );
     }
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-muted/40 p-8">
+    <div className="relative min-h-screen flex items-center justify-center bg-slate-50 dark:bg-slate-950 p-6 overflow-hidden transition-colors">
+      {/* Ambient background glows */}
+      <div className="absolute -top-40 -left-40 w-96 h-96 bg-purple-500/15 dark:bg-purple-600/20 rounded-full blur-3xl pointer-events-none" />
+      <div className="absolute -bottom-40 -right-40 w-96 h-96 bg-indigo-500/15 dark:bg-indigo-600/20 rounded-full blur-3xl pointer-events-none" />
 
-      <Card className="w-full max-w-2xl">
-
-        <CardHeader>
-
-          <CardTitle>
-            Create Organization
+      <Card className="relative z-10 w-full max-w-2xl border border-slate-200 dark:border-slate-800 bg-white/90 dark:bg-slate-900/90 backdrop-blur-xl shadow-xl shadow-purple-900/5 dark:shadow-purple-950/20 rounded-2xl p-4 transition-all">
+        <CardHeader className="text-center pb-2">
+          <CardTitle className="text-2xl font-extrabold tracking-tight text-slate-900 dark:text-slate-50">
+            Create Your Organization
           </CardTitle>
-
+          <p className="text-sm text-slate-500 dark:text-slate-400 mt-1">
+            Register your company workspace and owner account to get started.
+          </p>
         </CardHeader>
 
-        <CardContent>
-
+        <CardContent className="space-y-6 pt-2">
           {serverError && (
-            <div className="mb-5 rounded-lg bg-red-50 border border-red-200 p-3 text-sm text-red-600">
+            <div className="mb-5 rounded-xl bg-red-50 dark:bg-red-950/40 border border-red-200 dark:border-red-800 p-3 text-sm text-red-600 dark:text-red-400">
               {serverError}
             </div>
           )}
 
           <form
             onSubmit={handleSubmit(onSubmit)}
-            className="space-y-5"
+            className="space-y-4"
           >
-
             {/* Organization */}
-
-            <Input
-              label="Organization Name"
-              {...register("name")}
-              error={errors.name?.message}
-            />
-
-            <Input
-              label="Organization Code"
-              {...register("code")}
-              error={errors.code?.message}
-            />
-
-            <Input
-              label="Organization Email"
-              type="email"
-              {...register("email")}
-              error={errors.email?.message}
-            />
-
-            <Input
-              label="Phone Number"
-              {...register("phone")}
-              error={errors.phone?.message}
-            />
-
-            <Input
-              label="Website"
-              {...register("website")}
-              error={errors.website?.message}
-            />
-
-            <div>
-
-              <label className="mb-2 block text-sm font-medium">
-                Company Logo
-              </label>
-
-              <input
-                type="file"
-                accept="image/png,image/jpeg,image/webp,image/svg+xml"
-                onChange={(e) =>
-                  setLogo(e.target.files?.[0])
-                }
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <Input
+                label="Organization Name"
+                placeholder="Acme Corp"
+                className="bg-slate-50 dark:bg-slate-800/80 text-slate-900 dark:text-slate-100 border-slate-300 dark:border-slate-700"
+                {...register("name")}
+                error={errors.name?.message}
               />
 
+              <Input
+                label="Organization Code"
+                placeholder="ACME"
+                className="bg-slate-50 dark:bg-slate-800/80 text-slate-900 dark:text-slate-100 border-slate-300 dark:border-slate-700"
+                {...register("code")}
+                error={errors.code?.message}
+              />
             </div>
 
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <Input
+                label="Organization Email"
+                placeholder="contact@acme.com"
+                className="bg-slate-50 dark:bg-slate-800/80 text-slate-900 dark:text-slate-100 border-slate-300 dark:border-slate-700"
+                type="email"
+                {...register("email")}
+                error={errors.email?.message}
+              />
+
+              <Input
+                label="Phone Number"
+                placeholder="+91 9876543210"
+                className="bg-slate-50 dark:bg-slate-800/80 text-slate-900 dark:text-slate-100 border-slate-300 dark:border-slate-700"
+                {...register("phone")}
+                error={errors.phone?.message}
+              />
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <Input
+                label="Website"
+                placeholder="https://acme.com"
+                className="bg-slate-50 dark:bg-slate-800/80 text-slate-900 dark:text-slate-100 border-slate-300 dark:border-slate-700"
+                {...register("website")}
+                error={errors.website?.message}
+              />
+
+              <div>
+                <label className="mb-2 block text-sm font-medium text-slate-700 dark:text-slate-300">
+                  Company Logo
+                </label>
+                <input
+                  type="file"
+                  className="w-full text-sm text-slate-500 file:mr-4 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-sm file:font-semibold file:bg-purple-50 file:text-purple-700 hover:file:bg-purple-100 dark:file:bg-purple-950/60 dark:file:text-purple-300 cursor-pointer"
+                  accept="image/png,image/jpeg,image/webp,image/svg+xml"
+                  onChange={(e) =>
+                    setLogo(e.target.files?.[0])
+                  }
+                />
+              </div>
+            </div>
+
+            <hr className="border-slate-200 dark:border-slate-800 my-2" />
+
             {/* Owner */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <Input
+                label="Owner Name"
+                placeholder="John Doe"
+                className="bg-slate-50 dark:bg-slate-800/80 text-slate-900 dark:text-slate-100 border-slate-300 dark:border-slate-700"
+                {...register("ownerName")}
+                error={errors.ownerName?.message}
+              />
 
-            <Input
-              label="Owner Name"
-              {...register("ownerName")}
-              error={errors.ownerName?.message}
-            />
+              <Input
+                label="Owner Email"
+                placeholder="john@acme.com"
+                className="bg-slate-50 dark:bg-slate-800/80 text-slate-900 dark:text-slate-100 border-slate-300 dark:border-slate-700"
+                type="email"
+                {...register("ownerEmail")}
+                error={errors.ownerEmail?.message}
+              />
+            </div>
 
-            <Input
-              label="Owner Email"
-              type="email"
-              {...register("ownerEmail")}
-              error={errors.ownerEmail?.message}
-            />
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <PasswordInput
+                label="Password"
+                placeholder="••••••••"
+                className="bg-slate-50 dark:bg-slate-800/80 text-slate-900 dark:text-slate-100 border-slate-300 dark:border-slate-700"
+                {...register("password")}
+                error={errors.password?.message}
+              />
 
-            <PasswordInput
-              label="Password"
-              {...register("password")}
-              error={errors.password?.message}
-            />
-
-            <PasswordInput
-              label="Confirm Password"
-              {...register("confirmPassword")}
-              error={errors.confirmPassword?.message}
-            />
+              <PasswordInput
+                label="Confirm Password"
+                placeholder="••••••••"
+                className="bg-slate-50 dark:bg-slate-800/80 text-slate-900 dark:text-slate-100 border-slate-300 dark:border-slate-700"
+                {...register("confirmPassword")}
+                error={errors.confirmPassword?.message}
+              />
+            </div>
 
             <Checkbox
               label="I agree to the Terms & Privacy Policy"
@@ -217,24 +244,24 @@ export default function RegisterPage() {
 
             <Button
               type="submit"
+              variant="primary"
+              size="lg"
               fullWidth
+              className="bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-700 hover:to-indigo-700 text-white font-semibold shadow-lg shadow-purple-500/25 transition-all py-3 rounded-xl mt-4"
             >
               Create Organization
             </Button>
 
           </form>
 
-          <div className="mt-6 text-center text-red-50 text-sm">
-
-           <span className="text-amber-50"> Already have an account?</span>
-
+          <div className="pt-2 text-center text-sm text-slate-600 dark:text-slate-400 border-t border-slate-200 dark:border-slate-800/80 mt-4">
+            Already have an account?{" "}
             <Link
               to="/login"
-              className="ml-2 text-primary font-medium"
+              className="font-semibold text-purple-600 dark:text-purple-400 hover:underline transition-colors ml-1"
             >
               Sign In
             </Link>
-
           </div>
 
         </CardContent>

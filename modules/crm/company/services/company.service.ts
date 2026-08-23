@@ -8,41 +8,27 @@ export class CompanyService {
     new CompanyRepository();
 
   async create(
-
     data: CreateCompanyDto
-
   ) {
+    if (!data.tenantId) {
+      throw new Error("Tenant ID is required.");
+    }
 
-    const exists =
-      await this.repository.findByName(
-
-        data.tenantId,
-
-        data.name
-
-      );
+    const exists = await this.repository.findByName(
+      data.tenantId,
+      data.name
+    );
 
     if (exists) {
-
-      throw new Error(
-
-        "Company already exists."
-
-      );
-
+      throw new Error("Company already exists.");
     }
 
     return this.repository.create({
-
       ...data,
-
-      publicId:
-        await this.generatePublicId(),
-
+      tenantId: data.tenantId,
+      publicId: await this.generatePublicId(),
       status: "ACTIVE"
-
     });
-
   }
 
   async generatePublicId() {

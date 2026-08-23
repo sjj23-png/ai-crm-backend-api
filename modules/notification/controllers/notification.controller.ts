@@ -12,84 +12,66 @@ export class NotificationController {
     req: Request,
     res: Response
   ) => {
+    const result = await this.service.create(
+      req.user!.tenantId,
+      req.body
+    );
 
-    const result =
-      await this.service.create(
-        req.user.tenantId,
-        req.body
-      );
-
-    return res
-      .status(201)
-      .json(result);
-
+    return res.status(201).json(result);
   };
 
   getAll = async (
     req: Request,
     res: Response
   ) => {
-
-    const result =
-      await this.service.getAll(
-        req.user.tenantId,
-        req.query
-      );
+    const result = await this.service.getAll(
+      req.user!.tenantId,
+      req.query
+    );
 
     return res.json(result);
-
   };
 
   getById = async (
     req: Request,
     res: Response
   ) => {
-
-    const result =
-      await this.service.getById(
-        req.params.id
-      );
+    const result = await this.service.getById(
+      req.params.id as string
+    );
 
     return res.json(result);
-
   };
 
   update = async (
     req: Request,
     res: Response
   ) => {
-
-    const result =
-      await this.service.update(
-        req.params.id,
-        req.body
-      );
+    const result = await this.service.update(
+      req.params.id as string,
+      req.body
+    );
 
     return res.json(result);
-
   };
 
   markAsRead = async (
     req: Request,
     res: Response
   ) => {
-
-    const result =
-      await this.service.markAsRead(
-        req.params.id
-      );
+    const result = await this.service.markAsRead(
+      req.params.id as string
+    );
 
     return res.json(result);
-
   };
 
   delete = async (
     req: Request,
     res: Response
   ) => {
-
     await this.service.delete(
-      req.params.id
+      req.params.id as string
     );
 
     return res.json({

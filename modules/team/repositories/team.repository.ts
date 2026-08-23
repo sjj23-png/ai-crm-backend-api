@@ -10,16 +10,15 @@ export class TeamRepository {
     tenantId: string,
     data: CreateTeamDto
   ) {
-
     return prisma.team.create({
-
       data: {
         tenantId,
-        ...data,
+        name: data.name,
+        description: data.description,
+        leadId: data.leadId,
+        departmentId: data.departmentId || "",
       },
-
     });
-
   }
 
   async findById(

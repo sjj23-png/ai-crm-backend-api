@@ -20,7 +20,7 @@ export class AuthController {
 
   register = async (req: Request, res: Response) => {
     try {
-      const result = await this.authService.register(req.body);
+      const result = await this.authService.register(req.body, req.file);
 
       return res.status(201).json(result);
     } catch (error: any) {
@@ -43,24 +43,16 @@ export class AuthController {
   };
 
   logout = async (req: Request, res: Response) => {
-  try {
-    const token = req.headers.authorization?.split(" ")[1];
+    try {
+      const result = await this.authService.logout(req.user!.id);
 
-    if (!token) {
-      return res.status(401).json({
-        message: "Unauthorized",
+      return res.json(result);
+    } catch (error: any) {
+      return res.status(400).json({
+        message: error.message,
       });
     }
-
-    const result = await this.authService.logout(token);
-
-    return res.json(result);
-  } catch (error: any) {
-    return res.status(400).json({
-      message: error.message,
-    });
-  }
-};
+  };
 
 me = async (req: Request, res: Response) => {
   try {

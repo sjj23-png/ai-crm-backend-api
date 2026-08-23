@@ -18,6 +18,12 @@ const api = {
 
   departments: "/departments",
 
+  designations: "/designations",
+
+  teams: "/teams",
+
+  organizations: "/organizations",
+
   roles: "/roles",
 
   permissions: "/permissions",

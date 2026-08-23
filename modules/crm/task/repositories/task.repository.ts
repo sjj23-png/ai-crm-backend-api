@@ -16,126 +16,82 @@ import {
 export class TaskRepository {
 
   async create(
-
-    data:
-    CreateTaskDto & {
-
+    data: CreateTaskDto & {
       publicId: string;
-
+      tenantId: string;
       status: TaskStatus;
-
       priority: TaskPriority;
-
     }
-
   ) {
-
     return prisma.task.create({
-
-      data,
-
+      data: {
+        publicId: data.publicId,
+        tenantId: data.tenantId,
+        title: data.title,
+        description: data.description,
+        completed: data.status === TaskStatus.COMPLETED,
+        priority: data.priority,
+        dueDate: data.dueDate,
+        companyId: data.companyId,
+        dealId: data.dealId,
+        stageId: data.stageId || "",
+        assignedUserId: data.assignedTo,
+      },
       include: {
-
         assignee: true,
-
         company: true,
-
         deal: true,
-
-        tags: {
-
+        taskTags: {
           include: {
-
-            tag: true
-
-          }
-
-        }
-
-      }
-
+            tag: true,
+          },
+        },
+      },
     });
-
   }
 
   async findById(
     id: string
   ) {
-
     return prisma.task.findUnique({
-
       where: {
-
-        id
-
+        id,
       },
-
       include: {
-
         assignee: true,
-
         company: true,
-
         deal: true,
-
-        tags: {
-
+        taskTags: {
           include: {
-
-            tag: true
-
-          }
-
-        }
-
-      }
-
+            tag: true,
+          },
+        },
+      },
     });
-
   }
 
   async findAll(
     tenantId: string
   ) {
-
     return prisma.task.findMany({
-
       where: {
-
         tenantId,
-
-        deletedAt: null
-
+        deletedAt: null,
       },
-
       include: {
-
         assignee: true,
-
         company: true,
-
         deal: true,
-
-        tags: {
-
+        taskTags: {
           include: {
-
-            tag: true
-
-          }
-
-        }
-
+            tag: true,
+          },
+        },
       },
-
       orderBy: {
-
-        dueDate: "asc"
-
-      }
-
+        dueDate: "asc",
+      },
     });
-
   }
 
   async update(

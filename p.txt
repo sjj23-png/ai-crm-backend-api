@@ -319,3 +319,155 @@ export default router;
 
 
 mkdir uploads\user-avatars uploads\lead-attachments uploads\company-documents uploads\temp modules\storage\controllers modules\storage\services modules\storage\middleware modules\storage\routes modules\storage\constants modules\storage\utils && type nul > modules\storage\controllers\storage.controller.ts && type nul > modules\storage\services\storage.service.ts && type nul > modules\storage\middleware\upload.middleware.ts && type nul > modules\storage\routes\storage.routes.ts && type nul > modules\storage\constants\upload.constants.ts && type nul > modules\storage\utils\file.utils.ts && type nul > modules\storage\index.ts
+
+
+
+______________________
+# Authentication & Upload Functionality Audit Report
+
+This document details the audit of the authentication module (from frontend views to backend controller/repositories) and the file upload functionality.
+
+---
+
+## 1. Upload Functionality & File Storage
+
+* **Upload Middleware:** 
+  The backend has a dedicated upload middleware defined in [upload.middleware.ts](file:///d:/A1codes/Chatgptdevelopment/Projects/AI-CRM/modules/storage/middleware/upload.middleware.ts) using `multer`.
+* **Storage Location:** 
+  Files are configured to be stored inside the `uploads/tenant-logos` directory in the current working directory:
+  * Absolute path: `d:\A1codes\Chatgptdevelopment\Projects\AI-CRM\uploads\tenant-logos`
+* **Static Serving:** 
+  The backend serves files statically from the root `uploads` directory at the `/uploads` route as configured in [app.ts](file:///d:/A1codes/Chatgptdevelopment/Projects/AI-CRM/apps/api/src/app.ts):
+  ```typescript
+  app.use("/uploads", express.static(path.join(process.cwd(), "uploads")));
+  ```
+* **Status:** 
+  **Incomplete/Not Working in Registration.** Although the storage logic and folder creation utilities exist, they are not wired up to the registration endpoint being used.
+
+---
+
+## 2. API Routes Audit
+
+Here is the status of the routes defined in [index.ts](file:///d:/A1codes/Chatgptdevelopment/Projects/AI-CRM/apps/api/src/routes/index.ts):
+
+| Route Group | Path | Status | File Location |
+| :--- | :--- | :--- | :--- |
+| **Auth** | `/api/auth/*` | **Active** | [auth.routes.ts](file:///d:/A1codes/Chatgptdevelopment/Projects/AI-CRM/modules/auth/auth.routes.ts) |
+| **Tenants** | `/api/tenants/*` | **Commented Out** ❌ | [tenant.routes.ts](file:///d:/A1codes/Chatgptdevelopment/Projects/AI-CRM/modules/tenant/tenant.routes.ts) |
+| **Organizations** | `/api/organizations/*` | **Commented Out** ❌ | [organization.route.ts](file:///d:/A1codes/Chatgptdevelopment/Projects/AI-CRM/modules/organization/organization.route.ts) |
+
+---
+
+## 3. The Registration Flow Mismatch (Critical Bug)
+
+During the audit, a major architectural disconnect was found between the frontend registration UI and the backend auth module:
+
+```mermaid
+sequenceDiagram
+    participant FE as Frontend (Signup.tsx)
+    participant BE_Auth as Backend Auth (/api/auth/register)
+    participant BE_Tenant as Backend Tenant (/api/tenants/register)
+
+    Note over FE: Sends: name, code, email, website,<br/>ownerName, ownerEmail, password, logo (File)
+    FE->>BE_Auth: POST /api/auth/register (multipart/form-data)
+    Note over BE_Auth: Fail: No multer middleware,<br/>expects: { name, email, password, tenantId, roleId } (JSON)
+    BE_Auth-->>FE: 400 Bad Request / Empty Body Error
+```
+
+### Issues Found:
+1. **Frontend Call Destination:** 
+   The frontend [Signup.tsx](file:///d:/A1codes/Chatgptdevelopment/Projects/AI-CRM/apps/web/webs/src/pages/auth/Signup.tsx) submits a `multipart/form-data` payload containing both organization data (name, code, email, website, logo file) and owner user data (ownerName, ownerEmail, password) to `POST /api/auth/register`.
+2. **Backend Route Lacks Multipart Parsing:** 
+   The `/api/auth/register` route does not use `multer` or any file-parsing middleware. Hence, sending `multipart/form-data` results in an empty `req.body` and a failed request.
+3. **Backend Expected Payload Mismatch:** 
+   The backend `/api/auth/register` is designed to register an additional user for an *already existing* tenant. It validates against `RegisterSchema` (which requires `tenantId` and `roleId`) rather than creating a new tenant and its owner.
+4. **Backend Tenant Route Incompleteness:** 
+   While the `/api/tenants/register` route exists on the backend and includes the logo upload middleware, it is commented out in [index.ts](file:///d:/A1codes/Chatgptdevelopment/Projects/AI-CRM/apps/api/src/routes/index.ts). Even if un-commented:
+   * The controller doesn't extract the uploaded logo file information from `req.file`.
+   * The service doesn't create the corresponding administrator/owner user record in the `User` table, leaving the newly created tenant without an account to log in.
+
+---
+
+## 4. Other Auth Endpoints Status
+
+| Endpoint | Method | Middleware | Backend Status | Working? |
+| :--- | :--- | :--- | :--- | :--- |
+| `/login` | `POST` | None | Verifies credentials, generates access + refresh tokens, records login session. | **Yes** |
+| `/logout` | `POST` | `authGuard` | Removes the token session from the database. | **Yes** |
+| `/me` | `GET` | `authGuard` | Resolves user profile details using the decoded JWT payload. | **Yes** |
+| `/refresh` | `POST` | None | Validates database refresh tokens and issues a new access token. | **Yes** |
+
+---
+
+## 5. Recommended Solution Plan
+
+To fix the registration and upload issues, the registration endpoint on the backend should be unified to handle tenant signup. We should:
+
+1. Add `uploadTenantLogo.single("logo")` to `/api/auth/register`.
+2. Update the signup service to perform the following sequentially inside a transaction:
+   * Create a new `Tenant` database entry (saving the logo file name in the `logo` field).
+   * Create a default `OWNER` `Role` for that Tenant.
+   * Create the owner `User` linked to the Tenant and the new Role.
+   * Create a `UserProfile` entry for that user.
+
+
+_____________________
+# Implementation Plan - Auth Module Completion and Verification
+
+We will complete and verify the authentication module on both the backend and the frontend. Our research has identified critical bugs in token/session management, a missing frontend request interceptor for authorization headers, and a few TypeScript compilation errors.
+
+---
+
+## Proposed Changes
+
+### Backend
+
+#### [MODIFY] [auth.service.ts](file:///d:/A1codes/Chatgptdevelopment/Projects/AI-CRM/modules/auth/services/auth.service.ts)
+* In `login()`, insert the generated refresh token into the `RefreshToken` table using `createRefreshToken` so it can be verified during token refreshes.
+* Update `logout()` signature to accept `userId` instead of `token`. Update the implementation to delete all active sessions and revoke/invalidate all refresh tokens associated with the user.
+
+#### [MODIFY] [auth.controller.ts](file:///d:/A1codes/Chatgptdevelopment/Projects/AI-CRM/modules/auth/controllers/auth.controller.ts)
+* In `logout()`, call `this.authService.logout(req.user!.id)` directly.
+
+#### [MODIFY] [app.ts](file:///d:/A1codes/Chatgptdevelopment/Projects/AI-CRM/apps/api/src/app.ts)
+* Move `app.use(globalErrorHandler)` to the end of the middleware chain, after mounting all routes, so that Express route errors are properly intercepted.
+
+---
+
+### Frontend
+
+#### [MODIFY] [auth.service.ts](file:///d:/A1codes/Chatgptdevelopment/Projects/AI-CRM/apps/web/webs/src/features/auth/services/auth.service.ts)
+* Update imports of `LoginRequest`, `LoginResponse`, and `AuthUser` from `@/types` to ensure strict type matching.
+* Implement `getUser()` to retrieve the logged-in user from storage.
+* Implement `me()` to fetch the profile from `/auth/me` and update storage.
+* Implement `getCurrentUser()` as an alias of `me()` to support TanStack Query hooks.
+
+#### [MODIFY] [interceptor.ts](file:///d:/A1codes/Chatgptdevelopment/Projects/AI-CRM/apps/web/webs/src/services/api/interceptor.ts)
+* Import `storageService` and update the request interceptor to append the `Authorization: Bearer <token>` header to outgoing API requests.
+
+#### [MODIFY] [theme.types.ts](file:///d:/A1codes/Chatgptdevelopment/Projects/AI-CRM/apps/web/webs/src/design-system/theme/theme.types.ts)
+* Adjust `colors` type of `Theme` interface to `Record<keyof typeof colors.light, string>` to make it compatible with dark theme color codes.
+
+#### [MODIFY] [Button.tsx](file:///d:/A1codes/Chatgptdevelopment/Projects/AI-CRM/apps/web/webs/src/design-system/components/buttons/Button/Button.tsx)
+* Add the `"success"` variant style to `buttonVariants` to avoid prop-type assignment errors in `IconButton`.
+
+#### [MODIFY] [WidgetContainer.tsx](file:///d:/A1codes/Chatgptdevelopment/Projects/AI-CRM/apps/web/webs/src/components/dashboard/WidgetContainer.tsx)
+* Make `title` optional and conditionally render the header container.
+
+#### [MODIFY] [AppRouter.tsx](file:///d:/A1codes/Chatgptdevelopment/Projects/AI-CRM/apps/web/webs/src/app/router/AppRouter.tsx)
+* Enclose the `/dashboard` route group in `<Route element={<ProtectedRoute />}>` to enforce authentication.
+* Clean up unused imports.
+
+#### [MODIFY] [auth.api.ts](file:///d:/A1codes/Chatgptdevelopment/Projects/AI-CRM/apps/web/webs/src/features/auth/api/auth.api.ts)
+* Clean up unused imports.
+
+---
+
+## Verification Plan
+
+### Automated Tests
+* Run `npm run check` (TypeScript check) on the backend.
+* Run `npm run build` / `tsc -b` on the frontend to ensure the application compiles cleanly.
+
+### Manual Verification
+* Perform a login, browse the protected dashboard pages, and perform a logout to verify end-to-end functionality.

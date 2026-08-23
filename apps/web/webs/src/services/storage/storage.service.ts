@@ -24,11 +24,11 @@ class BrowserStorageService implements StorageProvider {
   }
 
   clear(): void {
-  this.remove(storage.accessToken);
-  this.remove(storage.refreshToken);
-  this.remove(storage.user);
-  this.remove(storage.permissions);
-}
+    this.remove(storage.accessToken);
+    this.remove(storage.refreshToken);
+    this.remove(storage.user);
+    this.remove(storage.permissions);
+  }
 
   has(key: string): boolean {
     return localStorage.getItem(key) !== null;
@@ -42,28 +42,28 @@ class BrowserStorageService implements StorageProvider {
 
 
   getAccessToken(): string | null {
-  return this.get<string>(storage.accessToken);
-}
+    return this.get<string>(storage.accessToken);
+  }
 
-setAccessToken(token: string): void {
-  this.set(storage.accessToken, token);
-}
+  setAccessToken(token: string): void {
+    this.set(storage.accessToken, token);
+  }
 
-removeAccessToken(): void {
-  this.remove(storage.accessToken);
-}
+  removeAccessToken(): void {
+    this.remove(storage.accessToken);
+  }
 
-getRefreshToken(): string | null {
-  return this.get<string>(storage.refreshToken);
-}
+  getRefreshToken(): string | null {
+    return this.get<string>(storage.refreshToken);
+  }
 
-setRefreshToken(token: string): void {
-  this.set(storage.refreshToken, token);
-}
+  setRefreshToken(token: string): void {
+    this.set(storage.refreshToken, token);
+  }
 
-removeRefreshToken(): void {
-  this.remove(storage.refreshToken);
-}
+  removeRefreshToken(): void {
+    this.remove(storage.refreshToken);
+  }
 }
 
 const storageService = new BrowserStorageService();

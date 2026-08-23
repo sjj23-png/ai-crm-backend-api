@@ -11,22 +11,24 @@ export default function SearchBar() {
 
       <input
         type="search"
-        placeholder="Search..."
+        placeholder="Search data, companies, leads..."
         className="
           h-10
           w-full
           rounded-xl
           border
-          border-neutral-200
+          border-slate-200
           bg-white
           pl-10
           pr-4
           text-sm
           outline-none
           transition-all
-          focus:border-primary-500
-          dark:border-neutral-700
-          dark:bg-neutral-900
+          focus:border-purple-500
+          dark:border-[#263247]
+          dark:bg-[#111827]
+          dark:text-slate-100
+          dark:placeholder:text-[#64748B]
         "
       />
     </div>

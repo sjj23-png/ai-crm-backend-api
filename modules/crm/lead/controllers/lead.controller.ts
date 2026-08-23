@@ -24,10 +24,8 @@ export class LeadController {
 
     try {
 
-      const result =
-        await this.service.create(
-          req.body
-        );
+      const dto = { ...req.body, tenantId: req.user!.tenantId };
+      const result = await this.service.create(dto);
 
       return res
         .status(201)

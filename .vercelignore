@@ -1,0 +1,7 @@
+apps/web/webs
+node_modules
+dist
+.env
+.env.local
+logs
+tests

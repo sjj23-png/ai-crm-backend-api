@@ -13,35 +13,29 @@ export class DealService {
   async create(
     dto: CreateDealDto
   ) {
-
-    const existing =
-      await this.repository.findByTitle(
-        dto.tenantId,
-        dto.title
-      );
-
-    if (existing) {
-
-      throw new Error(
-        "Deal already exists."
-      );
-
+    if (!dto.tenantId || !dto.stageId) {
+      throw new Error("Tenant ID and Stage ID are required.");
     }
 
-    const publicId =
-      `DEAL-${Date.now()}`;
+    const existing = await this.repository.findByTitle(
+      dto.tenantId,
+      dto.title
+    );
+
+    if (existing) {
+      throw new Error("Deal already exists.");
+    }
+
+    const publicId = `DEAL-${Date.now()}`;
 
     return this.repository.create({
-
       ...dto,
-
+      tenantId: dto.tenantId,
+      pipelineId: dto.pipelineId,
+      stageId: dto.stageId,
       publicId,
-
-      status:
-        DealStatus.OPEN,
-
+      status: DealStatus.OPEN,
     });
-
   }
 
   async getAll(

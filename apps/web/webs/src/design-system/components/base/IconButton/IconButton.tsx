@@ -1,4 +1,5 @@
 import type { IconButtonProps } from "./IconButton.types";
+import { cn } from "@/lib/utils/cn";
 
 
 import {
@@ -28,7 +29,7 @@ export function IconButton({
     <button
       ref={ref}
       disabled={disabled || loading}
-      className={[
+      className={cn(
         baseClasses,
 
         variantClasses[variant],
@@ -36,7 +37,7 @@ export function IconButton({
         sizeClasses[size],
 
         className,
-      ].join(" ")}
+      )}
       {...props}
     >
       {loading ? (

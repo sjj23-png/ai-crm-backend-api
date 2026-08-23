@@ -1,0 +1,17 @@
+{
+  "mcpServers": {
+    "playwright": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "@playwright/mcp@latest",
+        "--browser=chromium",
+        "--viewport-size=1440,900"
+      ],
+      "env": {
+        "BASE_URL": "http://localhost:5173",
+        "API_URL": "http://localhost:4001"
+      }
+    }
+  }
+}

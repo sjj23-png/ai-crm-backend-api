@@ -6,19 +6,23 @@ export class AuthRepository {
    * Find user by email with all authentication relations.
    */
   async findUserByEmail(email: string) {
-    return prisma.user.findUnique({
+    return prisma.user.findFirst({
       where: { email },
-      include: {
+      select: {
+        id: true,
+        tenantId: true,
+        roleId: true,
+        name: true,
+        email: true,
+        passwordHash: true,
+        status: true,
         tenant: true,
         role: {
           include: {
             permissions: {
-              include:
-
-              {
+              include: {
                 permission: true,
               },
-
             },
           },
         },
@@ -95,15 +99,21 @@ export class AuthRepository {
     });
   }
   async findUserById(id: string) {
-  return prisma.user.findUnique({
-    where: { id },
-    include: {
-      tenant: true,
-      role: true,
-      profile: true,
-    },
-  });
-}
+    return prisma.user.findFirst({
+      where: { id },
+      select: {
+        id: true,
+        tenantId: true,
+        roleId: true,
+        name: true,
+        email: true,
+        status: true,
+        tenant: true,
+        role: true,
+        profile: true,
+      },
+    });
+  }
 
 async createRefreshToken(data: {
   userId: string;
@@ -130,6 +140,97 @@ async findRefreshToken(token: string) {
       where: {
         userId,
       },
+    });
+  }
+
+  /**
+   * Revoke all active refresh tokens of a user.
+   */
+  async revokeUserRefreshTokens(userId: string) {
+    return prisma.refreshToken.updateMany({
+      where: {
+        userId,
+        revoked: false,
+      },
+      data: {
+        revoked: true,
+      },
+    });
+  }
+
+  async findTenantByCode(code: string) {
+    return prisma.tenant.findUnique({
+      where: { code },
+    });
+  }
+
+  async findTenantByEmail(email: string) {
+    return prisma.tenant.findUnique({
+      where: { email },
+    });
+  }
+
+  async registerTenantAndOwner(data: {
+    tenantName: string;
+    tenantCode?: string;
+    tenantEmail: string;
+    tenantPhone?: string;
+    tenantWebsite?: string;
+    logo?: string;
+    ownerName: string;
+    ownerEmail: string;
+    passwordHash: string;
+  }) {
+    return prisma.$transaction(async (tx) => {
+      const tenantCode = data.tenantCode || data.tenantName.replace(/[^a-zA-Z0-9]/g, "").slice(0, 6).toUpperCase() + Date.now().toString().slice(-4);
+      const tenant = await tx.tenant.create({
+        data: {
+          name: data.tenantName,
+          code: tenantCode,
+          email: data.tenantEmail,
+          phone: data.tenantPhone || null,
+          website: data.tenantWebsite || null,
+          logo: data.logo || null,
+        },
+      });
+
+      const adminRole = await tx.role.create({
+        data: {
+          tenantId: tenant.id,
+          name: "Administrator",
+          code: "ADMIN",
+          description: "Tenant Owner and Administrator",
+        },
+      });
+
+      const user = await tx.user.create({
+        data: {
+          tenantId: tenant.id,
+          roleId: adminRole.id,
+          name: data.ownerName,
+          email: data.ownerEmail,
+          passwordHash: data.passwordHash,
+          status: "ACTIVE",
+        },
+        select: {
+          id: true,
+          tenantId: true,
+          roleId: true,
+          name: true,
+          email: true,
+          status: true,
+          createdAt: true,
+          updatedAt: true,
+        },
+      });
+
+      await tx.userProfile.create({
+        data: {
+          userId: user.id,
+        },
+      });
+
+      return { tenant, user };
     });
   }
 }

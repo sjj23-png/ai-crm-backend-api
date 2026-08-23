@@ -4,6 +4,7 @@
 import type {
   BadgeProps,
 } from "./Badge.types";
+import { cn } from "@/lib/utils/cn";
 
 import {
   baseClasses,
@@ -35,19 +36,17 @@ export function Badge({
   return (
     <span
       ref={ref}
-      className={[
+      className={cn(
         baseClasses,
 
         variantClasses[variant],
 
         sizeClasses[size],
 
-        rounded
-          ? "rounded-full"
-          : "rounded-md",
+        rounded ? "rounded-full" : "rounded-md",
 
         className,
-      ].join(" ")}
+      )}
       {...props}
     >
       {dot && (

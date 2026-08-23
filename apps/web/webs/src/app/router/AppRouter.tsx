@@ -1,24 +1,24 @@
 import { Navigate, Route, Routes } from "react-router-dom";
 
-
 import { AuthLayout } from "../layouts/AuthLayout";
 import { DashboardLayout } from "../layouts/DashboardLayout";
-import { DashboardHome } from "@/pages/dashboard";
+import {
+  DashboardHome,
+  OrganizationPage,
+  CompaniesPage,
+  ContactsPage,
+  UsersPage,
+  RolesPage,
+  ProjectsPage,
+  ReportsPage,
+  SettingsPage,
+  CrmPage,
+} from "@/pages/dashboard";
 import GuestRoute from "../guards/GuestRoute";
-
 import ProtectedRoute from "../guards/ProtectedRoute";
-
 import LoginPage from "@/pages/auth/LoginPage";
-// function LoginPage() {
-//   return <div className="p-8">Login Page (Coming Soon)</div>;
-// }
-
-// function DashboardPage() {
-//   return <div className="p-8"><DashboardHome/></div>;
-// }
-
-
 import SignupPage from "@/pages/auth/Signup";
+
 function NotFoundPage() {
   return (
     <div className="flex min-h-screen items-center justify-center text-xl font-semibold">
@@ -35,24 +35,29 @@ export function AppRouter() {
           <Route path="/login" element={<LoginPage />} />
         </Route>
       </Route>
-       <Route element={<GuestRoute />}>
+      <Route element={<GuestRoute />}>
         <Route element={<AuthLayout />}>
           <Route path="/register" element={<SignupPage />} />
         </Route>
       </Route>
 
-
       <Route element={<ProtectedRoute />}>
         <Route path="/dashboard" element={<DashboardLayout />}>
           <Route index element={<DashboardHome />} />
+          <Route path="organization" element={<OrganizationPage />} />
+          <Route path="companies" element={<CompaniesPage />} />
+          <Route path="contacts" element={<ContactsPage />} />
+          <Route path="users" element={<UsersPage />} />
+          <Route path="roles" element={<RolesPage />} />
+          <Route path="projects" element={<ProjectsPage />} />
+          <Route path="reports" element={<ReportsPage />} />
+          <Route path="settings" element={<SettingsPage />} />
+          <Route path="crm" element={<CrmPage />} />
         </Route>
       </Route>
 
-
       <Route path="/" element={<Navigate to="/dashboard" replace />} />
       <Route path="*" element={<NotFoundPage />} />
-
-
     </Routes>
   );
 }

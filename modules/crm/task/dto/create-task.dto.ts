@@ -8,6 +8,7 @@ export const CreateTaskSchema = z.object({
   companyId: z.string().cuid().optional(),
 
   dealId: z.string().cuid().optional(),
+  stageId: z.string().cuid().optional(),
 
   assignedTo: z.string().cuid().optional(),
 

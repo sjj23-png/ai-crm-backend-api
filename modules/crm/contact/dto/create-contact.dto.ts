@@ -3,11 +3,13 @@ import { z } from "zod";
 
 export const CreateContactSchema = z.object({
 
-  tenantId: z.string().cuid(),
+  tenantId: z.string().optional(),
 
   companyId: z.string().cuid(),
 
   ownerId: z.string().cuid().optional(),
+
+  teamId: z.string().cuid().optional(),
 
   firstName: z.string().trim().min(2).max(100),
 

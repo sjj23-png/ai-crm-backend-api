@@ -1,13 +1,12 @@
 import { z } from "zod";
 
-
 export const CreateLeadSchema = z.object({
 
-  tenantId: z.string().cuid(),
+  tenantId: z.string().optional(),
 
-  ownerId: z.string().cuid(),
+  ownerId: z.string().cuid().optional(),
 
-  teamId: z.string().cuid(),
+  teamId: z.string().cuid().optional(),
 
   companyId: z.string().cuid().optional(),
 

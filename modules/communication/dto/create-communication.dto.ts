@@ -1,7 +1,7 @@
 import {
   CommunicationChannel,
   CommunicationDirection,
-} from "@prisma/client";
+} from "../enums/communication.enums";
 
 export interface CreateCommunicationDto {
   companyId?: string;

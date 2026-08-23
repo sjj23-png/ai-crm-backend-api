@@ -1,6 +1,7 @@
 import {
   RiArrowDownSLine,
 } from "@remixicon/react";
+import { cn } from "@/lib/utils/cn";
 
 import type {
   SelectProps,
@@ -41,10 +42,10 @@ export function Select({
 }: SelectProps) {
   return (
     <div
-      className={[
+      className={cn(
         wrapperClasses,
-        fullWidth ? "w-full" : "",
-      ].join(" ")}
+        fullWidth && "w-full",
+      )}
     >
       {label && (
         <label className={labelClasses}>
@@ -62,14 +63,12 @@ export function Select({
         <select
           ref={ref}
           required={required}
-          className={[
+          className={cn(
             baseSelectClasses,
             sizeClasses[size],
-            error
-              ? "border-red-500 focus:ring-red-200"
-              : "",
+            error && "border-red-500 focus:ring-red-200",
             className,
-          ].join(" ")}
+          )}
           {...props}
         >
           {placeholder && (

@@ -1,96 +1,43 @@
 import { OrganizationRepository } from "../repositories/organization.repository";
-import { CreateOrganizationDto } from "../dto/create-organization.dto";
+import { UpdateUserOrganizationDto } from "../dto/update-user-organization.dto";
 
 export class OrganizationService {
+  private repository = new OrganizationRepository();
 
-  private repository =
-    new OrganizationRepository();
-
-  async create(
-    tenantId: string,
-    data: CreateOrganizationDto
-  ) {
-
-    const existing =
-      await this.repository.findByCode(
-        tenantId,
-        data.code
-      );
-
-    if (existing) {
-      throw new Error(
-        "Organization code already exists."
-      );
+  async assign(tenantId: string, userId: string, data: UpdateUserOrganizationDto) {
+    const user = await this.repository.findUserById(userId);
+    if (!user) {
+      throw new Error("User not found.");
+    }
+    if (user.tenantId !== tenantId) {
+      throw new Error("Unauthorized access to user of another tenant.");
     }
 
-    return this.repository.create({
-      tenantId,
-      ...data,
-    });
-
-  }
-
-  async getAll(
-    tenantId: string
-  ) {
-    return this.repository.findAll(
-      tenantId
-    );
-  }
-
-  async getById(
-    id: string
-  ) {
-
-    const organization =
-      await this.repository.findById(id);
-
-    if (!organization) {
-      throw new Error(
-        "Organization not found."
-      );
+    if (data.managerId) {
+      const manager = await this.repository.findUserById(data.managerId);
+      if (!manager) {
+        throw new Error("Manager user not found.");
+      }
+      if (manager.tenantId !== tenantId) {
+        throw new Error("Manager must belong to the same organization/tenant.");
+      }
+      if (userId === data.managerId) {
+        throw new Error("A user cannot report to themselves.");
+      }
     }
 
-    return organization;
-
+    return this.repository.assignUserOrganization(userId, data);
   }
 
-  async update(
-    id: string,
-    data: {
-      name?: string;
-      code?: string;
-      description?: string;
+  async getHierarchy(tenantId: string, userId: string) {
+    const user = await this.repository.findUserById(userId);
+    if (!user) {
+      throw new Error("User not found.");
     }
-  ) {
-
-    const organization =
-      await this.repository.findById(id);
-
-    if (!organization) {
-      throw new Error(
-        "Organization not found."
-      );
+    if (user.tenantId !== tenantId) {
+      throw new Error("Unauthorized access to user hierarchy of another tenant.");
     }
 
-    return this.repository.update(
-      id,
-      data
-    );
-
+    return this.repository.getUserHierarchy(userId);
   }
-
-  async delete(
-    id: string
-  ) {
-
-    await this.repository.delete(id);
-
-    return {
-      message:
-        "Organization deleted successfully.",
-    };
-
-  }
-
 }

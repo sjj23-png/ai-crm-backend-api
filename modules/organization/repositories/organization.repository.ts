@@ -1,69 +1,93 @@
 import prisma from "../../../database/prisma.service";
+import { UpdateUserOrganizationDto } from "../dto/update-user-organization.dto";
 
 export class OrganizationRepository {
-
-  async create(data: {
-    tenantId: string;
-    name: string;
-    code: string;
-    description?: string;
-  }) {
-    return prisma.organization.create({
-      data,
-    });
-  }
-
-  async findById(id: string) {
-    return prisma.organization.findUnique({
-      where: { id },
-    });
-  }
-
-  async findByCode(
-    tenantId: string,
-    code: string
+  async assignUserOrganization(
+    userId: string,
+    data: UpdateUserOrganizationDto
   ) {
-    return prisma.organization.findFirst({
-      where: {
-        tenantId,
-        code,
+    return prisma.user.update({
+      where: { id: userId },
+      data: {
+        departmentId: data.departmentId,
+        teamId: data.teamId,
+        designationId: data.designationId,
+        managerId: data.managerId || null,
       },
     });
   }
 
-  async findAll(tenantId: string) {
-    return prisma.organization.findMany({
-      where: {
-        tenantId,
-      },
-      orderBy: {
-        createdAt: "desc",
+  async findUserById(userId: string) {
+    return prisma.user.findUnique({
+      where: { id: userId },
+      include: {
+        tenant: true,
+        role: true,
+        profile: true,
       },
     });
   }
 
-  async update(
-    id: string,
-    data: {
-      name?: string;
-      code?: string;
-      description?: string;
+  async getUserHierarchy(userId: string) {
+    const user = await prisma.user.findUnique({
+      where: { id: userId },
+      include: {
+        designation: true,
+        team: true,
+        department: true,
+        manager: {
+          include: {
+            designation: true,
+          },
+        },
+      },
+    });
+
+    if (!user) {
+      throw new Error("User not found.");
     }
-  ) {
-    return prisma.organization.update({
-      where: {
-        id,
-      },
-      data,
-    });
-  }
 
-  async delete(id: string) {
-    return prisma.organization.delete({
-      where: {
-        id,
-      },
-    });
-  }
+    const reportingLine = [];
+    let currentManager = user.manager;
+    while (currentManager) {
+      reportingLine.push({
+        id: currentManager.id,
+        name: currentManager.name,
+        email: currentManager.email,
+        designation: currentManager.designation,
+      });
 
+      if (reportingLine.length > 10 || currentManager.managerId === currentManager.id) {
+        break;
+      }
+
+      if (currentManager.managerId) {
+        currentManager = await prisma.user.findUnique({
+          where: { id: currentManager.managerId },
+          include: {
+            designation: true,
+            manager: {
+              include: {
+                designation: true,
+              },
+            },
+          },
+        });
+      } else {
+        currentManager = null;
+      }
+    }
+
+    return {
+      user: {
+        id: user.id,
+        name: user.name,
+        email: user.email,
+        designation: user.designation,
+        team: user.team,
+        department: user.department,
+      },
+      reportingLine,
+    };
+  }
 }

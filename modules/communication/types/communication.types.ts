@@ -2,7 +2,7 @@ import {
   CommunicationChannel,
   CommunicationDirection,
   CommunicationStatus,
-} from "@prisma/client";
+} from "../enums/communication.enums";
 
 export interface CommunicationFilters {
 

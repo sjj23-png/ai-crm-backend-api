@@ -1,11 +1,16 @@
-import axios from "axios";
+
 import type { AxiosError, InternalAxiosRequestConfig } from "axios";
 
 
+import storageService from "../storage";
 import { apiClient } from "./client";
 
 apiClient.interceptors.request.use(
   (config: InternalAxiosRequestConfig) => {
+    const token = storageService.getAccessToken();
+    if (token) {
+      config.headers.Authorization = `Bearer ${token}`;
+    }
     return config;
   },
   (error: AxiosError) => Promise.reject(error),

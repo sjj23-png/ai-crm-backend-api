@@ -4,7 +4,7 @@ import {
   CommunicationChannel,
   CommunicationDirection,
   CommunicationStatus,
-} from "@prisma/client";
+} from "../enums/communication.enums";
 
 export const createCommunicationSchema = z.object({
 

@@ -28,7 +28,8 @@
     "prisma:deploy": "prisma migrate deploy --schema=database/prisma/schema.prisma",
     "prisma:studio": "prisma studio --schema=database/prisma/schema.prisma",
     "prisma:format": "prisma format --schema=database/prisma/schema.prisma",
-    "prisma:seed": "tsx database/prisma/seed.ts"
+    "prisma:seed": "tsx database/prisma/seed.ts",
+    "mcp:start": "node scripts/start-mcp.js"
   },
   "dependencies": {
     "@prisma/client": "^6.19.3",

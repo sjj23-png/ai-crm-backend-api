@@ -1,6 +1,6 @@
 import {
   CommunicationStatus,
-} from "@prisma/client";
+} from "../enums/communication.enums";
 
 export interface UpdateCommunicationDto {
 

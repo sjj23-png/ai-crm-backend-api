@@ -1,4 +1,5 @@
 import type { InputProps } from "./Input.type";
+import { cn } from "@/lib/utils/cn";
 
 import {
   wrapperClasses,
@@ -34,10 +35,10 @@ export function Input({
 }: InputProps) {
   return (
     <div
-      className={[
+      className={cn(
         wrapperClasses,
-        fullWidth ? "w-full" : "",
-      ].join(" ")}
+        fullWidth && "w-full",
+      )}
     >
       {label && (
         <label className={labelClasses}>
@@ -61,16 +62,14 @@ export function Input({
         <input
           ref={ref}
           required={required}
-          className={[
+          className={cn(
             baseInputClasses,
             sizeClasses[size],
-            leftIcon ? "pl-10" : "",
-            rightIcon ? "pr-10" : "",
-            error
-              ? "border-red-500 focus:ring-red-200"
-              : "",
+            leftIcon && "pl-10",
+            rightIcon && "pr-10",
+            error && "border-red-500 focus:ring-red-200",
             className,
-          ].join(" ")}
+          )}
           {...props}
         />
 

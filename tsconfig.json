@@ -6,6 +6,8 @@
     "rootDir": "./",
     "outDir": "./dist",
     "strict": true,
+    "noUnusedLocals": false,
+    "noUnusedParameters": false,
     "esModuleInterop": true,
     "allowSyntheticDefaultImports": true,
     "resolveJsonModule": true,
@@ -28,6 +30,9 @@
   "exclude": [
     "node_modules",
     "dist",
-    ".prisma"
+    ".prisma",
+    "apps/web",
+    "apps/admin-web",
+    "apps/landing-site"
   ]
 }

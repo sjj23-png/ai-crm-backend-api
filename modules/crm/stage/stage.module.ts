@@ -22,9 +22,9 @@ router.post(
 );
 
 router.get(
-  "/",
+  "/pipeline/:pipelineId",
   authGuard,
-  controller.getAll
+  controller.getPipelineStages
 );
 
 router.get(

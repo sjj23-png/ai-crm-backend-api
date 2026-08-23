@@ -5,10 +5,7 @@ import type {
   CheckboxProps,
 } from "./Checkbox.types";
 import { useId } from "react";
-
-
-
-
+import { cn } from "@/lib/utils/cn";
 
 import {
   wrapperClasses,
@@ -44,10 +41,10 @@ export function Checkbox({
           ref={ref}
           id={inputId}
           type="checkbox"
-          className={[
+          className={cn(
             checkboxClasses,
             className,
-          ].join(" ")}
+          )}
           {...props}
         />
 

@@ -19,8 +19,8 @@ import authApi from "../api";
 import type {
   LoginRequest,
   LoginResponse,
-  MeResponse,
-} from "../types/auth.types";
+  AuthUser,
+} from "@/types";
 
 class AuthService {
   async login(
@@ -59,12 +59,22 @@ class AuthService {
     }
   }
 
-  // async getCurrentUser(): Promise<MeResponse> {
-  //   return getCurrentUserApi();
-  // }
+  getUser(): AuthUser | null {
+    return storageService.get<AuthUser>("crm_user");
+  }
+
+  async me(): Promise<AuthUser> {
+    const response = await authApi.me();
+    storageService.set("crm_user", response.data);
+    return response.data;
+  }
+
+  async getCurrentUser(): Promise<AuthUser> {
+    return this.me();
+  }
 
   isAuthenticated(): boolean {
-    return storageService.has("access_token");
+    return !!storageService.getAccessToken();
   }
 }
 

@@ -6,6 +6,7 @@ export function AuthLayout() {
   return (
     <main className="min-h-screen bg-neutral-50 dark:bg-neutral-950">
       <div className="grid min-h-screen lg:grid-cols-2">
+
         {/* Branding Section */}
         <section className="hidden lg:flex flex-col justify-between bg-primary-600 p-12 text-white">
           <div>
@@ -27,8 +28,8 @@ export function AuthLayout() {
         </section>
 
         {/* Auth Form */}
-        <section className="flex items-center justify-center p-6 sm:p-8 lg:p-12">
-          <div className="w-full max-w-md">
+        <section className="flex items-center justify-center p-1 sm:p-8 lg:p-12 ">
+          <div className="w-full">
             <Outlet />
           </div>
         </section>

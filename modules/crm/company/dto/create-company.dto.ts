@@ -2,44 +2,37 @@ import { z } from "zod";
 
 
 export const CreateCompanySchema = z.object({
+  tenantId: z.string().optional(),
 
-  tenantId: z.string().cuid(),
+  teamId: z.string().optional().nullable().or(z.literal("")),
 
-  teamId: z.string().cuid(),
-
-  ownerId: z.string().cuid(),
+  ownerId: z.string().optional().nullable().or(z.literal("")),
 
   name: z.string()
     .min(2)
     .max(200),
 
-  industry: z.string().optional(),
+  industry: z.string().optional().nullable().or(z.literal("")),
 
-  website: z.string().url().optional(),
+  website: z.string().optional().nullable().or(z.literal("")),
 
-  email: z.string().email().optional(),
+  email: z.string().optional().nullable().or(z.literal("")),
 
-  phone: z.string().optional(),
+  phone: z.string().optional().nullable().or(z.literal("")),
 
-  address: z.string().optional(),
+  address: z.string().optional().nullable().or(z.literal("")),
 
-  city: z.string().optional(),
+  city: z.string().optional().nullable().or(z.literal("")),
 
-  state: z.string().optional(),
+  state: z.string().optional().nullable().or(z.literal("")),
 
-  country: z.string().optional(),
+  country: z.string().optional().nullable().or(z.literal("")),
 
-  postalCode: z.string().optional(),
+  postalCode: z.string().optional().nullable().or(z.literal("")),
 
-  companySize: z.enum([
-    "MICRO",
-    "SMALL",
-    "MEDIUM",
-    "ENTERPRISE"
-  ]),
+  companySize: z.string().optional().nullable().or(z.literal("")),
 
-  description: z.string().optional()
-
+  description: z.string().optional().nullable().or(z.literal(""))
 });
 
 export type CreateCompanyDto =

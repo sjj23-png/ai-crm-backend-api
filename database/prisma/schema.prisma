@@ -3,9 +3,8 @@ generator client {
 }
 
 datasource db {
-  provider = "postgresql"
-  url      = env("DATABASE_URL")
-
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
   directUrl = env("DIRECT_URL")
 }
 
@@ -69,10 +68,11 @@ model Tenant {
   departments    Department[]
   designations   Designation[]
   communications Communication[]
-  activities Activity[]
+  activities     Activity[]
 
   notes Note[]
-tasks Task[]
+  tasks Task[]
+
   @@index([status])
 }
 
@@ -85,12 +85,12 @@ model User {
   teamId   String? // Foreign key for team membership
   ledTeams Team[]  @relation("TeamLead") // User can lead teams
 
-  team         Team?  @relation("TeamMembers", fields: [teamId], references: [id]) // User * ---- 1 Team
-  name         String
-  email        String @unique
-  passwordHash String
+  team          Team?      @relation("TeamMembers", fields: [teamId], references: [id]) // User * ---- 1 Team
+  name          String
+  email         String     @unique
+  passwordHash  String
   assignedTasks Task[]
-  status UserStatus @default(ACTIVE)
+  status        UserStatus @default(ACTIVE)
 
   lastLoginAt    DateTime?
   ownedCompanies Company[] @relation("CompanyOwner") // User * ---- 1 Company (As Owner)
@@ -107,8 +107,15 @@ model User {
   auditLogs       AuditLog[]
   userPermissions UserPermission[]
 
-  designationId  String?
-  designation    Designation?    @relation(fields: [designationId], references: [id])
+  designationId String?
+  designation   Designation? @relation(fields: [designationId], references: [id])
+  departmentId  String?
+  department    Department?  @relation(fields: [departmentId], references: [id])
+
+  managerId    String?
+  manager      User?   @relation("UserReporting", fields: [managerId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  subordinates User[]  @relation("UserReporting")
+
   notifications  Notification[]
   leads          Lead[]
   contacts       Contact[]
@@ -117,6 +124,8 @@ model User {
   @@index([tenantId])
   @@index([roleId])
   @@index([status])
+  @@index([departmentId])
+  @@index([managerId])
 }
 
 model Notification {
@@ -145,19 +154,17 @@ model Notification {
 }
 
 model TaskTag {
-
   taskId String
 
   tagId String
 
-  task Task @relation( fields: [taskId], references: [id], onDelete: Cascade )
+  task Task @relation(fields: [taskId], references: [id], onDelete: Cascade)
 
-  tag Tag @relation( fields: [tagId], references: [id], onDelete: Cascade)
+  tag Tag @relation(fields: [tagId], references: [id], onDelete: Cascade)
 
   @@id([taskId, tagId])
-
-
 }
+
 model DealTag {
   dealId String
 
@@ -250,7 +257,6 @@ enum DealStatus {
  * =========================
  */
 model Activity {
-
   id String @id @default(cuid())
 
   publicId String @unique
@@ -275,30 +281,22 @@ model Activity {
 
   companyId String?
 
-  tenant Tenant @relation(fields: [tenantId],references: [id],onDelete: Cascade)
+  tenant Tenant @relation(fields: [tenantId], references: [id], onDelete: Cascade)
 
-  deal Deal? @relation(fields: [dealId],references: [id],onDelete: SetNull)
+  deal Deal? @relation(fields: [dealId], references: [id], onDelete: SetNull)
 
-  lead Lead? @relation(fields: [leadId],references: [id],onDelete: SetNull)
+  lead Lead? @relation(fields: [leadId], references: [id], onDelete: SetNull)
 
-  company Company? @relation(fields: [companyId],references: [id],onDelete: SetNull)
+  company Company? @relation(fields: [companyId], references: [id], onDelete: SetNull)
 
   @@index([tenantId])
-
   @@index([dealId])
-
   @@index([leadId])
-
   @@index([companyId])
-
   @@index([createdAt])
-
 }
 
-
-
 enum ActivityType {
-
   CREATED
 
   UPDATED
@@ -324,11 +322,9 @@ enum ActivityType {
   TASK_CREATED
 
   TASK_COMPLETED
-
 }
 
 model Task {
-
   id String @id @default(cuid())
 
   publicId String @unique
@@ -339,19 +335,19 @@ model Task {
 
   description String?
 
-  status TaskStatus @default(PENDING)
-
-  priority TaskPriority @default(MEDIUM)
-
   dueDate DateTime?
 
-  completedAt DateTime?
+  completed Boolean @default(false)
 
-  assignedTo String?
+  priority TaskPriority? @default(MEDIUM)
 
-  createdBy String?
+  assignedUserId String? // reference to a User if needed
 
-  updatedBy String?
+  stageId String
+
+  leadId String?
+
+  dealId String?
 
   createdAt DateTime @default(now())
 
@@ -359,39 +355,22 @@ model Task {
 
   deletedAt DateTime?
 
+  // Relations
+  tenant    Tenant    @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  assignee  User?     @relation(fields: [assignedUserId], references: [id], onDelete: SetNull)
+  stage     Stage     @relation(fields: [stageId], references: [id], onDelete: Cascade)
+  lead      Lead?     @relation(fields: [leadId], references: [id], onDelete: SetNull)
+  deal      Deal?     @relation(fields: [dealId], references: [id], onDelete: SetNull)
+  taskTags  TaskTag[]
+  company   Company?  @relation(fields: [companyId], references: [id])
   companyId String?
 
-  dealId String?
-
-  tenant Tenant @relation(fields: [tenantId],references: [id],onDelete: Cascade)
-
-  assignee User? @relation( fields: [assignedTo], references: [id],onDelete: SetNull)
-
-  company Company?@relation( fields: [companyId],references: [id], onDelete: SetNull)
-
-  deal Deal? @relation(fields: [dealId], references: [id],onDelete: SetNull)
-
-  tags TaskTag[]
-
   @@index([tenantId])
-
-  @@index([companyId])
-
-  @@index([dealId])
-
-  @@index([assignedTo])
-
-  @@index([status])
-
-  @@index([priority])
-
-
+  @@index([stageId])
+  @@index([assignedUserId])
 }
 
-
-
 enum TaskStatus {
-
   PENDING
 
   IN_PROGRESS
@@ -399,10 +378,9 @@ enum TaskStatus {
   COMPLETED
 
   CANCELLED
-
 }
-enum TaskPriority {
 
+enum TaskPriority {
   LOW
 
   MEDIUM
@@ -410,10 +388,9 @@ enum TaskPriority {
   HIGH
 
   URGENT
-
 }
-model Note {
 
+model Note {
   id String @id @default(cuid())
 
   publicId String @unique
@@ -440,25 +417,21 @@ model Note {
 
   dealId String?
 
-  tenant Tenant @relation( fields: [tenantId], references: [id],onDelete: Cascade)
+  tenant Tenant @relation(fields: [tenantId], references: [id], onDelete: Cascade)
 
-  company Company? @relation( fields: [companyId], references: [id], onDelete: SetNull)
+  company Company? @relation(fields: [companyId], references: [id], onDelete: SetNull)
 
-  lead Lead? @relation( fields: [leadId], references: [id], onDelete: SetNull)
+  lead Lead? @relation(fields: [leadId], references: [id], onDelete: SetNull)
 
-  deal Deal? @relation( fields: [dealId], references: [id],onDelete: SetNull)
+  deal Deal? @relation(fields: [dealId], references: [id], onDelete: SetNull)
 
   @@index([tenantId])
-
   @@index([companyId])
-
   @@index([leadId])
-
   @@index([dealId])
-
   @@index([createdAt])
-
 }
+
 model UserProfile {
   id String @id @default(cuid())
 
@@ -578,10 +551,11 @@ model Stage {
   pipeline Pipeline @relation(fields: [pipelineId], references: [id], onDelete: Cascade)
   deals    Deal[]
   leads    Lead[]
+  tasks    Task[]
 
+  @@unique([pipelineId, name])
   @@index([tenantId])
   @@index([status])
-  @@unique([pipelineId, name])
   @@index([pipelineId])
 }
 
@@ -617,11 +591,8 @@ model Pipeline {
   stages Stage[]
   deals  Deal[]
   leads  Lead[]
+
   @@unique([tenantId, name])
-
-
-
-
   @@index([status])
   @@index([tenantId])
 }
@@ -654,7 +625,7 @@ model Lead {
   status LeadStatus @default(NEW)
   score  Int        @default(0)
 
- estimatedValue Decimal? @db.Decimal(18,2) // Decimal or Float depending on precision needs
+  estimatedValue Decimal? @db.Decimal(18, 2) // Decimal or Float depending on precision needs
 
   expectedCloseDate DateTime?
 
@@ -681,6 +652,7 @@ model Lead {
   notes          Note[]
   pipelineId     String?
   stageId        String?
+  tasks          Task[]
 
   @@index([tenantId])
   @@index([companyId])
@@ -746,7 +718,7 @@ model Company {
   website  String?
   email    String?
   phone    String?
-  
+
   // Address Info
   address    String?
   city       String?
@@ -909,6 +881,7 @@ model Department {
   // Relations
   tenant Tenant @relation(fields: [tenantId], references: [id], onDelete: Cascade)
   teams  Team[]
+  users  User[]
 
   @@unique([tenantId, code])
   @@unique([tenantId, name])

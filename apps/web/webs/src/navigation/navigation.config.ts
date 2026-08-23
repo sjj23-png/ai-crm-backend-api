@@ -15,7 +15,7 @@ export const navigationConfig: NavigationGroup[] = [
 
         label: "Dashboard",
 
-        path: "/",
+        path: "/dashboard",
 
         icon: NavigationIcons.dashboard,
       },
@@ -33,9 +33,19 @@ export const navigationConfig: NavigationGroup[] = [
 
         label: "Companies",
 
-        path: "/companies",
+        path: "/dashboard/companies",
 
         icon: NavigationIcons.companies,
+      },
+
+      {
+        id: "contacts",
+
+        label: "Contacts",
+
+        path: "/dashboard/contacts",
+
+        icon: NavigationIcons.contacts,
       },
 
       {
@@ -43,7 +53,7 @@ export const navigationConfig: NavigationGroup[] = [
 
         label: "Users",
 
-        path: "/users",
+        path: "/dashboard/users",
 
         icon: NavigationIcons.users,
       },
@@ -53,9 +63,19 @@ export const navigationConfig: NavigationGroup[] = [
 
         label: "Roles",
 
-        path: "/roles",
+        path: "/dashboard/roles",
 
         icon: NavigationIcons.roles,
+      },
+
+      {
+        id: "structure",
+
+        label: "Structure",
+
+        path: "/dashboard/organization",
+
+        icon: NavigationIcons.structure,
       },
     ],
   },
@@ -69,9 +89,9 @@ export const navigationConfig: NavigationGroup[] = [
       {
         id: "crm",
 
-        label: "CRM",
+        label: "CRM Hub",
 
-        path: "/crm",
+        path: "/dashboard/crm",
 
         icon: NavigationIcons.crm,
       },
@@ -81,7 +101,7 @@ export const navigationConfig: NavigationGroup[] = [
 
         label: "Projects",
 
-        path: "/projects",
+        path: "/dashboard/projects",
 
         icon: NavigationIcons.projects,
       },
@@ -91,7 +111,7 @@ export const navigationConfig: NavigationGroup[] = [
 
         label: "Reports",
 
-        path: "/reports",
+        path: "/dashboard/reports",
 
         icon: NavigationIcons.reports,
       },
@@ -109,7 +129,7 @@ export const navigationConfig: NavigationGroup[] = [
 
         label: "Settings",
 
-        path: "/settings",
+        path: "/dashboard/settings",
 
         icon: NavigationIcons.settings,
       },

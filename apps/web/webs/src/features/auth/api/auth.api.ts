@@ -2,12 +2,8 @@ import {apiClient} from "../../../services/api";
 
 import api from "../../../constants/api";
 
-import type {
-  LoginRequest,
-  RegisterRequest,
-  // RefreshTokenRequest,
-} from "../types/auth.types";
-import type { LoginResponse } from "@/types";
+import type { LoginRequest } from "@/types";
+import type { RegisterRequest } from "../types/auth.types";
 
 
 

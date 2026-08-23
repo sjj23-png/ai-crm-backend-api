@@ -1,2 +1,1 @@
-import router from "./department.routes";
-export default router;
+export { default } from "./department.module";

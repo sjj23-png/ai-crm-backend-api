@@ -8,7 +8,7 @@ import type { motion } from "../tokens/motion";
 export interface Theme {
   name: "light" | "dark";
 
-  colors: typeof colors.light;
+  colors: Record<keyof typeof colors.light, string>;
 
   spacing: typeof spacing;
 

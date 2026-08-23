@@ -16,42 +16,44 @@ import {
 export class LeadRepository {
 
   async create(
-
-    data:
-    CreateLeadDto & {
-
+    data: CreateLeadDto & {
       publicId: string;
-
+      tenantId: string;
+      ownerId: string;
+      teamId: string;
       status: LeadStatus;
-
       score: number;
-
     }
-
   ) {
-
     return prisma.lead.create({
-
-      data,
-
-      include: {
-
-        company: true,
-
-        contact: true,
-
-        owner: true,
-
-        team: true,
-
-        pipeline: true,
-
-        stage: true,
-
+      data: {
+        publicId: data.publicId,
+        tenantId: data.tenantId,
+        ownerId: data.ownerId,
+        teamId: data.teamId,
+        companyId: data.companyId,
+        contactId: data.contactId,
+        pipelineId: data.pipelineId,
+        stageId: data.stageId,
+        firstName: data.firstName,
+        lastName: data.lastName,
+        email: data.email,
+        phone: data.phone,
+        source: data.source,
+        status: data.status,
+        score: data.score,
+        estimatedValue: data.estimatedValue,
+        expectedCloseDate: data.expectedCloseDate,
       },
-
+      include: {
+        company: true,
+        contact: true,
+        owner: true,
+        team: true,
+        pipeline: true,
+        stage: true,
+      },
     });
-
   }
 
   async findById(

@@ -14,87 +14,44 @@ export class TagRepository {
   }
 
   findByName(
-
-    tenantId:string,
-
-    name:string
-
-  ){
-
+    tenantId: string,
+    name: string
+  ) {
     return prisma.tag.findFirst({
-
-      where:{
-
+      where: {
         tenantId,
-
         name,
-
-        deletedAt:null
-
-      }
-
+      },
     });
-
   }
 
   findAll(
-
-    tenantId:string
-
-  ){
-
+    tenantId: string
+  ) {
     return prisma.tag.findMany({
-
-      where:{
-
+      where: {
         tenantId,
-
-        deletedAt:null
-
       },
-
-      orderBy:{
-
-        name:"asc"
-
-      }
-
+      orderBy: {
+        name: "asc",
+      },
     });
-
   }
 
   update(
-
-    id:string,
-
-    data:any
-
-  ){
-
+    id: string,
+    data: any
+  ) {
     return prisma.tag.update({
-
-      where:{id},
-
-      data
-
+      where: { id },
+      data,
     });
-
   }
 
-  softDelete(id:string){
-
-    return prisma.tag.update({
-
-      where:{id},
-
-      data:{
-
-        deletedAt:new Date()
-
-      }
-
+  softDelete(id: string) {
+    return prisma.tag.delete({
+      where: { id },
     });
-
   }
 
 }

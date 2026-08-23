@@ -1,5 +1,60 @@
 User: read architecture
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+{
+  "email": "rahul.owner@acmetechnologies.com",
+  "password": "Password123!",
+  "rememberMe": true
+}
+
+Password123! jane@acme.com
 GitHub Copilot: Read [](file:///d%3A/A1codes/Chatgptdevelopment/Projects/AI-CRM/docs/architecture)
 
 Read [](file:///d%3A/A1codes/Chatgptdevelopment/Projects/AI-CRM/docs)

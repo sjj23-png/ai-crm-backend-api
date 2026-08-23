@@ -66,96 +66,46 @@ export class TaskController {
   };
 
   getById = async (
-
     req: Request,
-
     res: Response
-
   ) => {
-
     try {
-
-      const result =
-        await this.service.getById(
-
-          req.params.id
-
-        );
-
+      const result = await this.service.getById(
+        req.params.id as string
+      );
       return res.json(result);
-
+    } catch (error: any) {
+      return res.status(404).json({
+        message: error.message
+      });
     }
-
-    catch (error: any) {
-
-      return res
-        .status(404)
-        .json({
-
-          message:
-            error.message
-
-        });
-
-    }
-
   };
 
   update = async (
-
     req: Request,
-
     res: Response
-
   ) => {
-
     try {
-
-      const result =
-        await this.service.update(
-
-          req.params.id,
-
-          req.body
-
-        );
-
+      const result = await this.service.update(
+        req.params.id as string,
+        req.body
+      );
       return res.json(result);
-
+    } catch (error: any) {
+      return res.status(400).json({
+        message: error.message
+      });
     }
-
-    catch (error: any) {
-
-      return res
-        .status(400)
-        .json({
-
-          message:
-            error.message
-
-        });
-
-    }
-
   };
 
   delete = async (
-
     req: Request,
-
     res: Response
-
   ) => {
-
     try {
-
-      const result =
-        await this.service.delete(
-
-          req.params.id
-
-        );
-
+      const result = await this.service.delete(
+        req.params.id as string
+      );
       return res.json(result);
 
     }

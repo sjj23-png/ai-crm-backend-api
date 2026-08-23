@@ -1,4 +1,5 @@
 import { useId } from "react";
+import { cn } from "@/lib/utils/cn";
 
 
 import type {
@@ -56,10 +57,10 @@ export function Switch({
             id={inputId}
             type="checkbox"
             role="switch"
-            className={[
+            className={cn(
               inputClasses,
               className,
-            ].join(" ")}
+            )}
             {...props}
           />
 

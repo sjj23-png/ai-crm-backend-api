@@ -5,6 +5,7 @@ import {
   useMemo,
   useState,
 } from "react";
+import { cn } from "@/lib/utils/cn";
 
 import type {
   AvatarProps,
@@ -54,17 +55,15 @@ export function Avatar({
   return (
     <div
       ref={ref}
-      className={[
+      className={cn(
         wrapperClasses,
 
         sizeClasses[size],
 
-        rounded
-          ? "rounded-full"
-          : "rounded-xl",
+        rounded ? "rounded-full" : "rounded-xl",
 
         className,
-      ].join(" ")}
+      )}
       {...props}
     >
       {src && !imageError ? (
@@ -87,11 +86,11 @@ export function Avatar({
       )}
 
       <span
-        className={[
+        className={cn(
           "absolute bottom-0 right-0 h-3 w-3 rounded-full border-2 border-white dark:border-slate-900",
 
           statusClasses[status],
-        ].join(" ")}
+        )}
       />
     </div>
   );

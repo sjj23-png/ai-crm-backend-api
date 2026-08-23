@@ -1,4 +1,5 @@
 import type { ButtonProps } from "./Button.types";
+import { cn } from "@/lib/utils/cn";
 
 
 import {
@@ -34,17 +35,17 @@ export function Button({
     <button
       ref={ref}
       disabled={disabled || loading}
-      className={[
+      className={cn(
         baseClasses,
 
         variantClasses[variant],
 
         sizeClasses[size],
 
-        fullWidth ? "w-full" : "",
+        fullWidth && "w-full",
 
         className,
-      ].join(" ")}
+      )}
       {...props}
     >
       {loading ? (

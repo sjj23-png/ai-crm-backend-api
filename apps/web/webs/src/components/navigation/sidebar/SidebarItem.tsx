@@ -17,15 +17,15 @@ export default function SidebarItem({
       to={item.path}
       className={({ isActive }) =>
         [
-          "flex items-center gap-3 rounded-xl px-3 py-2 text-sm font-medium transition-colors",
+          "flex items-center gap-3 rounded-xl px-3.5 py-2.5 text-sm font-medium transition-all duration-200",
 
           isActive
-            ? "bg-primary-600 text-white"
-            : "text-neutral-600 hover:bg-neutral-100 dark:text-neutral-300 dark:hover:bg-neutral-800",
+            ? "bg-gradient-to-r from-purple-600 to-indigo-600 text-white shadow-md shadow-purple-900/30 font-semibold"
+            : "text-slate-600 dark:text-[#94A3B8] hover:bg-slate-100 hover:text-slate-900 dark:hover:bg-[#151C2B] dark:hover:text-slate-100",
         ].join(" ")
       }
     >
-      <Icon size={18} />
+      {Icon ? <Icon size={18} /> : <div className="w-4 h-4" />}
 
       <span className="flex-1">
         {item.label}

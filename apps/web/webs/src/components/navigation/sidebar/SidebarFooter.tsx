@@ -5,7 +5,7 @@ export default function SidebarFooter() {
   return (
     <footer className="border-t border-neutral-200 p-4 dark:border-neutral-800">
       <NavLink
-        to="/settings"
+        to="/dashboard/settings"
         className={({ isActive }) =>
           [
             "flex items-center gap-3 rounded-xl px-3 py-2 text-sm font-medium transition-colors",

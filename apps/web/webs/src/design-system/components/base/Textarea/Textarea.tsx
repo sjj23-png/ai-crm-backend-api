@@ -1,4 +1,5 @@
 import type { TextareaProps } from "./Textarea.types";
+import { cn } from "@/lib/utils/cn";
 
 
 import {
@@ -33,10 +34,10 @@ export function Textarea({
 }: TextareaProps) {
   return (
     <div
-      className={[
+      className={cn(
         wrapperClasses,
-        fullWidth ? "w-full" : "",
-      ].join(" ")}
+        fullWidth && "w-full",
+      )}
     >
       {label && (
         <label className={labelClasses}>
@@ -54,14 +55,12 @@ export function Textarea({
         ref={ref}
         rows={rows}
         required={required}
-        className={[
+        className={cn(
           baseTextareaClasses,
           sizeClasses[size],
-          error
-            ? "border-red-500 focus:ring-red-200"
-            : "",
+          error && "border-red-500 focus:ring-red-200",
           className,
-        ].join(" ")}
+        )}
         {...props}
       />
 

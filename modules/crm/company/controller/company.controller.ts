@@ -7,21 +7,17 @@ export class CompanyController {
     new CompanyService();
 
   create = async (
-
     req: Request,
-
     res: Response
-
   ) => {
 
     try {
 
       const result =
-        await this.service.create(
-
-          req.body
-
-        );
+        await this.service.create({
+          ...req.body,
+          tenantId: req.user!.tenantId,
+        });
 
       return res.status(201).json(result);
 
