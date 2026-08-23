@@ -1,0 +1,21 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+const express_1 = require("express");
+const auth_guard_1 = require("../../shared/guards/auth.guard");
+const validate_middleware_1 = require("../../shared/middleware/validate.middleware");
+const role_controller_1 = require("./controllers/role.controller");
+const role_permission_controller_1 = require("./controllers/role-permission.controller");
+const role_validator_1 = require("./validators/role.validator");
+const router = (0, express_1.Router)();
+const controller = new role_controller_1.RoleController();
+const permissionController = new role_permission_controller_1.RolePermissionController();
+router.post("/", auth_guard_1.authGuard, (0, validate_middleware_1.validate)(role_validator_1.createRoleSchema), controller.create);
+router.get("/", auth_guard_1.authGuard, controller.getAll);
+router.get("/:id", auth_guard_1.authGuard, controller.getById);
+router.put("/:id", auth_guard_1.authGuard, (0, validate_middleware_1.validate)(role_validator_1.updateRoleSchema), controller.update);
+router.delete("/:id", auth_guard_1.authGuard, controller.delete);
+router.post("/assign-permissions", auth_guard_1.authGuard, (0, validate_middleware_1.validate)(role_validator_1.assignPermissionSchema), permissionController.assign);
+router.get("/:roleId/permissions", auth_guard_1.authGuard, permissionController.getPermissions);
+router.delete("/:roleId/permissions/:permissionId", auth_guard_1.authGuard, permissionController.remove);
+exports.default = router;
+//# sourceMappingURL=role.routes.js.map

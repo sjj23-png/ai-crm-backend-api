@@ -1,0 +1,37 @@
+"use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+const express_1 = require("express");
+const auth_guard_1 = require("../auth/guards/auth.guard");
+const contact_module_1 = __importDefault(require("./contact/contact.module"));
+const router = (0, express_1.Router)();
+const lead_controller_1 = require("./lead/controllers/lead.controller");
+router.use("/contacts", contact_module_1.default);
+const lead = new lead_controller_1.LeadController();
+router.post("/leads", auth_guard_1.authGuard, lead.create);
+router.get("/leads", auth_guard_1.authGuard, lead.getAll);
+router.get("/leads/:id", auth_guard_1.authGuard, lead.getById);
+const pipeline_controller_1 = require("./pipeline/controllers/pipeline.controller");
+const pipeline = new pipeline_controller_1.PipelineController();
+router.post("/pipelines", auth_guard_1.authGuard, pipeline.create);
+router.get("/pipelines", auth_guard_1.authGuard, pipeline.getAll);
+const pipeline_module_1 = __importDefault(require("./pipeline/pipeline.module"));
+router.use("/crm", pipeline_module_1.default);
+const stage_controller_1 = require("./stage/controllers/stage.controller");
+const stage = new stage_controller_1.StageController();
+router.post("/stages", auth_guard_1.authGuard, stage.create);
+router.get("/pipelines/:pipelineId/stages", auth_guard_1.authGuard, stage.getPipelineStages);
+const tag_module_1 = __importDefault(require("./tag/tag.module"));
+router.use("/crm", tag_module_1.default);
+const note_module_1 = __importDefault(require("./note/note.module"));
+router.use("/crm", note_module_1.default);
+const task_module_1 = __importDefault(require("./task/task.module"));
+router.use("/crm", task_module_1.default);
+const activity_module_1 = __importDefault(require("./activity/activity.module"));
+router.use("/crm", activity_module_1.default);
+const deal_module_1 = __importDefault(require("./deal/deal.module"));
+router.use("/crm", deal_module_1.default);
+exports.default = router;
+//# sourceMappingURL=crm.module.js.map

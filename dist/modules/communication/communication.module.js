@@ -1,0 +1,20 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+const express_1 = require("express");
+const auth_guard_1 = require("../auth/guards/auth.guard");
+const validate_middleware_1 = require("../../shared/middleware/validate.middleware");
+const communication_validator_1 = require("./validators/communication.validator");
+const communication_controller_1 = require("./controllers/communication.controller");
+const router = (0, express_1.Router)();
+const controller = new communication_controller_1.CommunicationController();
+router.post("/", auth_guard_1.authGuard, (0, validate_middleware_1.validate)(communication_validator_1.createCommunicationSchema), controller.create);
+router.get("/", auth_guard_1.authGuard, controller.getAll);
+router.get("/id/:id", auth_guard_1.authGuard, controller.getById);
+router.get("/public/:publicId", auth_guard_1.authGuard, controller.getByPublicId);
+router.put("/:id", auth_guard_1.authGuard, (0, validate_middleware_1.validate)(communication_validator_1.updateCommunicationSchema), controller.update);
+router.patch("/:id/sent", auth_guard_1.authGuard, controller.markSent);
+router.patch("/:id/delivered", auth_guard_1.authGuard, controller.markDelivered);
+router.patch("/:id/read", auth_guard_1.authGuard, controller.markRead);
+router.delete("/:id", auth_guard_1.authGuard, controller.delete);
+exports.default = router;
+//# sourceMappingURL=communication.module.js.map
